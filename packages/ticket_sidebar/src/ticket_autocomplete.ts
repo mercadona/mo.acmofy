@@ -7,9 +7,9 @@ type Ticket = {
 }
 
 type hasGreaterFn = (len: number) => (str: string) => boolean
-const hasLengthGreaterThan: hasGreaterFn = (len: number) => (str: string) => str.length >= len
+const hasLengthGreaterOrEqualThan: hasGreaterFn = (len: number) => (str: string) => str.length >= len
 
-const hasLengthGreaterThanN = hasLengthGreaterThan(MINIMUM_ORDER_ID_LENGTH)
+const hasLengthGreaterThanN = hasLengthGreaterOrEqualThan(MINIMUM_ORDER_ID_LENGTH)
 
 export async function init() {
   function showError(error: Error) {

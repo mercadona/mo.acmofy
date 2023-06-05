@@ -2,6 +2,7 @@
   "name": "ACMOFy",
   "author": {
     "name": "Checkout Team",
+    "email": "sgarcal123456@mercadona.es",
     "url": "https://github.com/mercadona/mo.acmofy"
   },
   "defaultLocale": "en",

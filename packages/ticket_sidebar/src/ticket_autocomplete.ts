@@ -6,6 +6,11 @@ type Ticket = {
     id: number,
 }
 
+type TicketResponse = {
+    error: object,
+    ticket: Ticket
+}
+
 type hasGreaterFn = (len: number) => (str: string) => boolean
 const hasLengthGreaterOrEqualThan: hasGreaterFn = (len: number) => (str: string) => str.length >= len
 
@@ -14,8 +19,8 @@ const hasLengthGreaterThanN = hasLengthGreaterOrEqualThan(MINIMUM_ORDER_ID_LENGT
 export async function init() {
   zafClient.on('ticket.custom_field_360017010219.changed', async function(order_id) {
       console.log("Se ha modificado el pedido", order_id);
-        const ticket: Ticket = await zafClient.get("ticket")
-        const ticket_id = ticket.id
+      const {ticket}: TicketResponse = await zafClient.get("ticket")
+      const ticket_id = ticket.id
 
       if (order_id && hasLengthGreaterThanN(order_id)) {
           console.log("Order id identificado: ", order_id)
@@ -23,7 +28,7 @@ export async function init() {
               url: 'http://34.110.237.158/zendesk-hook',
               type:'POST',
               contentType: 'application/json',
-              data: JSON.stringify( {order_id, ticket_id, acmofy: true} )
+              data: JSON.stringify({order_id, ticket_id, acmofy: true})
           };
 
             try {

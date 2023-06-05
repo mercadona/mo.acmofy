@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "zendesk-vite-boilerplate",
+  "name": "ACMOFy",
   "version": "1.0.0",
   "description": "Boilerplate workspace for Zendesk apps",
   "main": "index.js",

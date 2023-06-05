@@ -1,4 +1,5 @@
 import zafClient from "@app/zendesk/sdk"
+import { hasLengthGreaterOrEqualThan } from "./utils"
 
 const MINIMUM_ORDER_ID_LENGTH = 5
 
@@ -10,9 +11,6 @@ type TicketResponse = {
     error: object,
     ticket: Ticket
 }
-
-type hasGreaterFn = (len: number) => (str: string) => boolean
-const hasLengthGreaterOrEqualThan: hasGreaterFn = (len: number) => (str: string) => str.length >= len
 
 const hasLengthGreaterThanN = hasLengthGreaterOrEqualThan(MINIMUM_ORDER_ID_LENGTH)
 

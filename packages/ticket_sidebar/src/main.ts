@@ -1,4 +1,4 @@
 import './style.css'
-import { init } from './counter.ts'
+import { init } from './ticket_autocomplete'
 
 init()

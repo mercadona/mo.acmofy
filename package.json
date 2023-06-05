@@ -23,6 +23,7 @@
   "license": "ISC",
   "packageManager": "yarn@3.2.1",
   "devDependencies": {
+    "@vitest/coverage-c8": "^0.31.4",
     "minimist": "^1.2.6",
     "vitest": "^0.31.4"
   }

@@ -12,10 +12,6 @@ const hasLengthGreaterOrEqualThan: hasGreaterFn = (len: number) => (str: string)
 const hasLengthGreaterThanN = hasLengthGreaterOrEqualThan(MINIMUM_ORDER_ID_LENGTH)
 
 export async function init() {
-  function showError(error: Error) {
-      console.log("Errores Request", error)
-  }
-
   zafClient.on('ticket.custom_field_360017010219.changed', async function(order_id) {
       console.log("Se ha modificado el pedido", order_id);
         const ticket: Ticket = await zafClient.get("ticket")
@@ -30,14 +26,16 @@ export async function init() {
               data: JSON.stringify( {order_id, ticket_id, acmofy: true} )
           };
 
-          zafClient.request(settings).then(
-              function(data) {
-                  console.log("Request Executed", data)
-              },
-              function(response) {
-                  showError(response);
-              }
-          );
+            try {
+              const data = await zafClient.request(settings)
+              console.log(`Request executed: ${data}`)
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    console.log(error.message)
+                } else {
+                    console.log(error)
+                }
+            }
       }
   });
 }

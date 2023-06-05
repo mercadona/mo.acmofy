@@ -1,6 +1,6 @@
 import zafClient from "@app/zendesk/sdk"
 
-const MINIMUM_ORDER_ID_LENGTH = 6
+const MINIMUM_ORDER_ID_LENGTH = 5
 
 type Ticket = {
     id: number,

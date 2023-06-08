@@ -1,31 +1,7 @@
-# What is this?
-
-This is a boilerplate for getting started really fast developing applications for Zendesk Support.
-There are few boilerplates out there, that tend to do the same, but I did not find them fitting my needs, mostly because some of them are bloated (with unnecessary dependencies), not well organised, using old technology, slow or just don't do enough.
-This boilerplate provides few things out of the box, so you can get started developing your next app in no time:
-
-1. **Use any front-end framework you like.** Really, pick your poison and go ahead.
-   This boilerplate made a choice of a bundler / compiler instead of framework. The choice here is modern and blazingly fast [Vite](https://vitejs.dev/).
-2. **Hot reload during development**.
-   With all the current boilerplates out there, you can only get your builds recompile but you still have to use your mouse to click "Refresh" icon in the browser. This is not the case any more, it's a real instant (thanks to Vite) HMR - make your change, save the file, see the result.
-3. **It is blazingly fast.**
-   Thanks to Vite under the hood, all of the frameworks are transpiled really fast, you have almost instant server start and build times.
-4. **Minimal dependencies list, just to get you started**.
-   I specifically opted in for some features and not the others (testing, for example). It is up to you to make the choice, but the point below will allow to do so easily.
-5. **Well organised file / folder structure that is very extendible**.
-   Boilerplate is structured in a way that you can extend all the current compiling scripts, control the destination output etc etc. You are the boss.
-6. **Use different frameworks for different application location.**
-   You might know, that Zendesk Support API supports different [app locations](https://developer.zendesk.com/api-reference/apps/apps-support-api/all_locations/). You are free to use different frameworks for different applications, as long as it compiles to good'ol JavaScript.
-
 # Get started
 
-1. Clone the repository
 
-```
-git clone git@github.com:OlegGulevskyy/zendesk-vite-boilerplate.git
-```
-
-2. Install `zcli` [npm package](https://www.npmjs.com/package/@zendesk/zcli) globally on your PC, that is distributed by Zendesk.
+1. Install `zcli` [npm package](https://www.npmjs.com/package/@zendesk/zcli) globally on your PC, that is distributed by Zendesk.
 
 ```
 yarn global add @zendesk/zcli
@@ -37,17 +13,17 @@ or
 npm install -g @zendesk/zcli
 ```
 
-3. Install boilerplate packages inside cloned repository
+2. Install mo.acmofy packages inside cloned repository
 
 ```
-cd zendesk-vite-boilerplate
+cd mo.acmofy
 yarn
 ```
 
 or
 
 ```
-cd zendesk-vite-boilerplate
+cd mo.acmofy
 npm install
 ```
 

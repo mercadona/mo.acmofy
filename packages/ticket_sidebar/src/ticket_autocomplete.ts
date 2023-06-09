@@ -1,10 +1,6 @@
 import zafClient from '@app/zendesk/sdk'
 import { hasLengthGreaterOrEqualThan } from './utils'
 
-const MINIMUM_ORDER_ID_LENGTH = 8
-const ORDER_ID_CUSTOM_FIELD_ID = 360012062392
-const URL_ZENDESK_HOOK = 'https://zendeskhook.mercadona.es/zendesk-hook'
-
 type Ticket = {
   id: number
 }
@@ -14,21 +10,37 @@ type TicketResponse = {
   ticket: Ticket
 }
 
-const hasLengthGreaterThanN = hasLengthGreaterOrEqualThan(
-  MINIMUM_ORDER_ID_LENGTH
-)
+type Settings = {
+  MINIMUM_ORDER_ID_LENGTH: number
+  URL_ZENDESK_HOOK: string
+  ORDER_ID_CUSTOM_FIELD_ID: number
+}
 
-const processOrderId = async function (order_id: string) {
+const processOrderId = async function (orderId: string) {
+  const metadata = await zafClient.metadata<Settings>()
+  let MINIMUM_ORDER_ID_LENGTH, URL_ZENDESK_HOOK
+  if (metadata.settings) {
+    MINIMUM_ORDER_ID_LENGTH = metadata.settings.MINIMUM_ORDER_ID_LENGTH
+    URL_ZENDESK_HOOK = metadata.settings.URL_ZENDESK_HOOK
+  }
   const { ticket }: TicketResponse = await zafClient.get('ticket')
-  const ticket_id = ticket.id
+  const ticketId = ticket.id
 
-  console.log('Tengo order id', order_id)
-  if (order_id && hasLengthGreaterThanN(order_id)) {
+  const hasLengthGreaterThanN = hasLengthGreaterOrEqualThan(
+    MINIMUM_ORDER_ID_LENGTH || 5
+  )
+
+  console.log('Tengo order id', orderId)
+  if (orderId && hasLengthGreaterThanN(orderId)) {
     const settings = {
       url: URL_ZENDESK_HOOK,
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({ order_id, ticket_id, acmofy: true }),
+      data: JSON.stringify({
+        order_id: orderId,
+        ticket_id: ticketId,
+        acmofy: true,
+      }),
     }
 
     console.log('Ejecutando request')
@@ -46,6 +58,12 @@ const processOrderId = async function (order_id: string) {
 }
 
 export async function init() {
+  const settings = await zafClient.metadata<Settings>()
+  const metadata = settings
+  let ORDER_ID_CUSTOM_FIELD_ID
+  if (metadata.settings) {
+    ORDER_ID_CUSTOM_FIELD_ID = metadata.settings.ORDER_ID_CUSTOM_FIELD_ID
+  }
   zafClient.on(
     `ticket.custom_field_${ORDER_ID_CUSTOM_FIELD_ID}.changed`,
     processOrderId

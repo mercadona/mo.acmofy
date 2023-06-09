@@ -19,6 +19,26 @@
       }
     }
   },
+  "parameters": [
+    {
+      "name": "MINIMUM_ORDER_ID_LENGTH",
+      "type": "number",
+      "secure": false,
+      "required": true
+    },
+    {
+      "name": "ORDER_ID_CUSTOM_FIELD_ID",
+      "type": "number",
+      "secure": false,
+      "required": true
+    },
+    {
+      "name": "URL_ZENDESK_HOOK",
+      "type": "url",
+      "secure": false,
+      "required": true
+    }
+  ],
   "version": "1.0.0",
   "frameworkVersion": "2.0"
 }

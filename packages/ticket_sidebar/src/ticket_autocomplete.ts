@@ -1,12 +1,16 @@
 import zafClient from '@app/zendesk/sdk'
 import { hasLengthGreaterOrEqualThan } from './utils'
 import type { Settings, TicketResponse } from './types'
+import HttpClient from './HttpClient'
 
-const processOrderId = async function (orderId: string, settings: Settings) {
-  let MINIMUM_ORDER_ID_LENGTH, URL_ZENDESK_HOOK
+const onOrderIdChange = async function (
+  orderId: string,
+  httpClient: HttpClient,
+  settings: Settings
+) {
+  let MINIMUM_ORDER_ID_LENGTH
   if (settings) {
     MINIMUM_ORDER_ID_LENGTH = settings.MINIMUM_ORDER_ID_LENGTH
-    URL_ZENDESK_HOOK = settings.URL_ZENDESK_HOOK
   }
   const { ticket }: TicketResponse = await zafClient.get('ticket')
   const ticketId = ticket.id
@@ -16,22 +20,17 @@ const processOrderId = async function (orderId: string, settings: Settings) {
   )
 
   console.log('Tengo order id', orderId)
-  if (orderId && hasLengthGreaterThanN(orderId)) {
-    const settings = {
-      url: URL_ZENDESK_HOOK,
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        order_id: orderId,
-        ticket_id: ticketId,
-        acmofy: true,
-      }),
+  if (hasLengthGreaterThanN(orderId)) {
+    const data = {
+      order_id: orderId,
+      ticket_id: ticketId,
+      acmofy: true,
     }
 
     console.log('Ejecutando request')
 
     try {
-      await zafClient.request(settings)
+      await httpClient.request(data)
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(error.message)
@@ -44,13 +43,19 @@ const processOrderId = async function (orderId: string, settings: Settings) {
 
 export async function init() {
   const metadata = await zafClient.metadata<Settings>()
-  let ORDER_ID_CUSTOM_FIELD_ID
-  if (metadata.settings) {
-    ORDER_ID_CUSTOM_FIELD_ID = metadata.settings.ORDER_ID_CUSTOM_FIELD_ID
+
+  if (!metadata.settings) return
+
+  const ORDER_ID_CUSTOM_FIELD_ID = metadata.settings.ORDER_ID_CUSTOM_FIELD_ID
+  const URL_ZENDESK_HOOK = metadata.settings.URL_ZENDESK_HOOK
+
+  const httpClient = new HttpClient(zafClient, URL_ZENDESK_HOOK)
+
+  const customCallback = (orderId: string) => {
+    if (!orderId) return
+    onOrderIdChange(orderId, httpClient, metadata.settings as Settings)
   }
 
-  const customCallback = (orderId: string) =>
-    processOrderId(orderId, metadata.settings as Settings)
   zafClient.on(
     `ticket.custom_field_${ORDER_ID_CUSTOM_FIELD_ID}.changed`,
     customCallback

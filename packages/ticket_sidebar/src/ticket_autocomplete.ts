@@ -2,12 +2,11 @@ import zafClient from '@app/zendesk/sdk'
 import { hasLengthGreaterOrEqualThan } from './utils'
 import type { Settings, TicketResponse } from './types'
 
-const processOrderId = async function (orderId: string) {
-  const metadata = await zafClient.metadata<Settings>()
+const processOrderId = async function (orderId: string, settings: Settings) {
   let MINIMUM_ORDER_ID_LENGTH, URL_ZENDESK_HOOK
-  if (metadata.settings) {
-    MINIMUM_ORDER_ID_LENGTH = metadata.settings.MINIMUM_ORDER_ID_LENGTH
-    URL_ZENDESK_HOOK = metadata.settings.URL_ZENDESK_HOOK
+  if (settings) {
+    MINIMUM_ORDER_ID_LENGTH = settings.MINIMUM_ORDER_ID_LENGTH
+    URL_ZENDESK_HOOK = settings.URL_ZENDESK_HOOK
   }
   const { ticket }: TicketResponse = await zafClient.get('ticket')
   const ticketId = ticket.id
@@ -44,14 +43,16 @@ const processOrderId = async function (orderId: string) {
 }
 
 export async function init() {
-  const settings = await zafClient.metadata<Settings>()
-  const metadata = settings
+  const metadata = await zafClient.metadata<Settings>()
   let ORDER_ID_CUSTOM_FIELD_ID
   if (metadata.settings) {
     ORDER_ID_CUSTOM_FIELD_ID = metadata.settings.ORDER_ID_CUSTOM_FIELD_ID
   }
+
+  const customCallback = (orderId: string) =>
+    processOrderId(orderId, metadata.settings as Settings)
   zafClient.on(
     `ticket.custom_field_${ORDER_ID_CUSTOM_FIELD_ID}.changed`,
-    processOrderId
+    customCallback
   )
 }

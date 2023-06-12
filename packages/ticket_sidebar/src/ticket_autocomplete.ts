@@ -1,20 +1,6 @@
 import zafClient from '@app/zendesk/sdk'
 import { hasLengthGreaterOrEqualThan } from './utils'
-
-type Ticket = {
-  id: number
-}
-
-type TicketResponse = {
-  error: object
-  ticket: Ticket
-}
-
-type Settings = {
-  MINIMUM_ORDER_ID_LENGTH: number
-  URL_ZENDESK_HOOK: string
-  ORDER_ID_CUSTOM_FIELD_ID: number
-}
+import type { Settings, TicketResponse } from './types'
 
 const processOrderId = async function (orderId: string) {
   const metadata = await zafClient.metadata<Settings>()

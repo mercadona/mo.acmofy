@@ -14,7 +14,7 @@ interface IMetadata<T> {
 interface IClient {
   invoke: (cmd: string, arg: any) => void
   get: (getter: string) => any
-  metadata: <U>() => IMetadata<U>
+  metadata: <U>() => Promise<IMetadata<U>>
   request: <U>(data: Object) => Promise<U>
   on: (eventName: string, listener: (...args: any) => any) => void
 }

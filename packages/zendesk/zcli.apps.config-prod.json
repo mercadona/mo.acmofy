@@ -1,0 +1,8 @@
+{
+  "app_id": 654321,
+  "parameters": {
+    "MINIMUM_ORDER_ID_LENGTH": 8,
+    "ORDER_ID_CUSTOM_FIELD_ID": 123456789,
+    "URL_ZENDESK_HOOK": "http://zendesk-hook"
+  }
+}

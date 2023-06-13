@@ -3,17 +3,13 @@
 @Library('mercadonaonline')
 import org.mercadonaonline.SlackNotifications
 import org.mercadonaonline.StatusTesters
-import org.mercadonaonline.Kubernetes
 import org.mercadonaonline.Registry
 import org.mercadonaonline.General
-import org.mercadonaonline.Mercanetes
 
 def slack = new SlackNotifications(this)
 def tester = new StatusTesters(this)
-def k8s = new Kubernetes(this)
 def registry = new Registry(this)
 def general = new General(this)
-def metadata = new Mercanetes(this)
 
 node {
     general.checkoutWithTags()
@@ -29,16 +25,10 @@ pipeline {
     }
 
     environment {
-        // IMAGE_NAME = "shop-sd-web"
         BUILD_WORKSPACE = "${env.WORKSPACE.replace(env.JENKINS_JOBS, '/var/jenkins_home/jobs')}"
         DOCKER_CONTEXT_WORKSPACE = "${env.WORKSPACE}"
         NODE_IMAGE = "eu.gcr.io/itg-mimercadona/node:16.14.0-1.0.0"
-        // DOCKER_IMAGE_NAME = 'shop-sd-web'
     }
-
-    // parameters {
-    //     choice(choices: ['Laboratory', 'Stable'], description: 'To which warehouse(colmena) group do you want to deploy?', name: 'branch')
-    // }
 
     stages {
 
@@ -51,7 +41,6 @@ pipeline {
                     associatedGitTag = general.getAssociatedTag()
                     imageTag = registry.getImageTag()
                     env.NODE_IMAGE_VERSION = imageTag
-                    // branch = params.branch.toLowerCase()
                     env.ZENDESK_SUBDOMAIN = "mercadona1523539178"
                     env.ZENDESK_CREDENTIALS_ID = "zendesk-sta-user-token"
 
@@ -130,7 +119,6 @@ pipeline {
             }
             steps {
                 script {
-                    boilerplate_ui = null
                     sh """
                         docker run --rm -m=4g \
                             -v $JENKINS_JOBS:/var/jenkins_home/jobs \
@@ -142,12 +130,6 @@ pipeline {
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build:sta
                     """
-                            // -e DEPLOYMENT_CHANNEL=$branch \
-                    // if (isProduction) {
-                    //     boilerplate_ui = registry.build(env.IMAGE_NAME, ".", imageTag)
-                    // } else {
-                    //     boilerplate_ui = registry.build(env.IMAGE_NAME)
-                    // }
                 }
             }
         }
@@ -160,7 +142,6 @@ pipeline {
             }
             steps {
                 script {
-                    boilerplate_ui = null
                     sh """
                         docker run --rm -m=4g \
                             -v $JENKINS_JOBS:/var/jenkins_home/jobs \
@@ -172,7 +153,6 @@ pipeline {
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build
                     """
-                            // -e DEPLOYMENT_CHANNEL=$branch \
                 }
             }
         }
@@ -207,9 +187,6 @@ pipeline {
                                 npx -p @zendesk/zcli zcli apps:update dist
                     """
                     }
-                            // -e DEPLOYMENT_CHANNEL=$branch \
-                    
-                    // registry.push(boilerplate_ui, imageTag)
                 }
             }
         }
@@ -249,55 +226,6 @@ pipeline {
                 }
             }
         }
-
-        // stage ('Publish release in metadata') {
-        //     when {
-        //         expression {
-        //             (isStaging || isProduction)
-        //         }
-        //     }
-        //     steps {
-        //         script {
-        //             appName = "shop-sd-web"
-        //             echo "Deploying to production image with tag: " + "${imageTag} and to the namespace: ${k8sEnvironment}"
-
-        //             k8sEnvironment = "staging"
-
-        //             if (isProduction) {
-        //                 k8sEnvironment = "production"
-        //                 imageTag = associatedGitTag
-        //             }
-
-        //             metadata.setMetadataEndpoint(k8sEnvironment)
-        //             metadata.release(appName, imageTag, branch)
-        //         }
-        //     }
-        //     post {
-        //         success {
-        //             script {
-        //                 slack.kubernetesNotifySuccess(k8sEnvironment, imageTag)
-        //             }
-        //         }
-        //         failure {
-        //             script {
-        //                 slack.kubernetesNotifyFailure(k8sEnvironment, imageTag)
-        //             }
-        //         }
-        //     }
-        // }
-
-        // stage ('Docker Registry clean up') {
-        //     when {
-        //         expression {
-        //             (isStaging)
-        //         }
-        //     }
-        //     steps {
-        //         script {
-        //             registry.cleanup(env.IMAGE_NAME, 90)
-        //         }
-        //     }
-        // }
     }
 
     post {

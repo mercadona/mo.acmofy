@@ -133,6 +133,7 @@ pipeline {
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
                             -e DEPLOYMENT_CHANNEL=$branch \
+                            -e HOME=/home/node
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build:sta

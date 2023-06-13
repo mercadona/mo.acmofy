@@ -36,9 +36,9 @@ pipeline {
         // DOCKER_IMAGE_NAME = 'shop-sd-web'
     }
 
-    parameters {
-        choice(choices: ['Laboratory', 'Stable'], description: 'To which warehouse(colmena) group do you want to deploy?', name: 'branch')
-    }
+    // parameters {
+    //     choice(choices: ['Laboratory', 'Stable'], description: 'To which warehouse(colmena) group do you want to deploy?', name: 'branch')
+    // }
 
     stages {
 
@@ -51,7 +51,7 @@ pipeline {
                     associatedGitTag = general.getAssociatedTag()
                     imageTag = registry.getImageTag()
                     env.NODE_IMAGE_VERSION = imageTag
-                    branch = params.branch.toLowerCase()
+                    // branch = params.branch.toLowerCase()
                     env.ZENDESK_SUBDOMAIN = "mercadona1523539178"
                     env.ZENDESK_CREDENTIALS_ID = "zendesk-sta-user-token"
 
@@ -137,12 +137,12 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
-                            -e DEPLOYMENT_CHANNEL=$branch \
                             -e HOME=/home/node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build:sta
                     """
+                            // -e DEPLOYMENT_CHANNEL=$branch \
                     // if (isProduction) {
                     //     boilerplate_ui = registry.build(env.IMAGE_NAME, ".", imageTag)
                     // } else {
@@ -167,12 +167,12 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
-                            -e DEPLOYMENT_CHANNEL=$branch \
                             -e HOME=/home/node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build
                     """
+                            // -e DEPLOYMENT_CHANNEL=$branch \
                 }
             }
         }
@@ -199,7 +199,6 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
-                            -e DEPLOYMENT_CHANNEL=$branch \
                             -e ZENDESK_SUBDOMAIN=${ZENDESK_SUBDOMAIN} \
                             -e ZENDESK_EMAIL=${ZENDESK_USERNAME} \
                             -e ZENDESK_API_TOKEN=${ZENDESK_API_TOKEN} \
@@ -208,6 +207,7 @@ pipeline {
                                 npx -p @zendesk/zcli zcli apps:update dist
                     """
                     }
+                            // -e DEPLOYMENT_CHANNEL=$branch \
                     
                     // registry.push(boilerplate_ui, imageTag)
                 }
@@ -238,7 +238,7 @@ pipeline {
                         ]
                     )
 
-                    withEnv(['PROJECT_NAME=boilerplate-web']) {
+                    withEnv(['PROJECT_NAME=acmofy']) {
                         changelog = sh(
                             returnStdout: true,
                             script: "./devtools/generate_changelog_by_topic.sh"

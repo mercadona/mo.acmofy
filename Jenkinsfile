@@ -232,9 +232,6 @@ pipeline {
         always {
             script {
                 def removeImage = null
-                if (boilerplate_ui != null) {
-                    removeImage = boilerplate_ui.id
-                }
                 general.restoreFilePermissions(env.BUILD_WORKSPACE, env.UID, env.GID)
                 general.cleanEnvironment(removeImage)
             }

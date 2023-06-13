@@ -123,6 +123,11 @@ pipeline {
         }
 
         stage ('Build staging') {
+            when {
+                expression {
+                    (isPR || isStaging)
+                }
+            }
             steps {
                 script {
                     boilerplate_ui = null
@@ -147,6 +152,30 @@ pipeline {
             }
         }
 
+        stage ('Build production') {
+            when {
+                expression {
+                    (isProduction)
+                }
+            }
+            steps {
+                script {
+                    boilerplate_ui = null
+                    sh """
+                        docker run --rm -m=4g \
+                            -v $JENKINS_JOBS:/var/jenkins_home/jobs \
+                            -e NODE_ENV='jenkins' \
+                            -e CI=true \
+                            -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
+                            -e DEPLOYMENT_CHANNEL=$branch \
+                            -e HOME=/home/node \
+                            --workdir $BUILD_WORKSPACE \
+                            --name $BUILD_TAG-build $NODE_IMAGE \
+                                npm run build
+                    """
+                }
+            }
+        }
 
         stage ('Publish') {
             when {
@@ -221,41 +250,41 @@ pipeline {
             }
         }
 
-        stage ('Publish release in metadata') {
-            when {
-                expression {
-                    (isStaging || isProduction)
-                }
-            }
-            steps {
-                script {
-                    appName = "shop-sd-web"
-                    echo "Deploying to production image with tag: " + "${imageTag} and to the namespace: ${k8sEnvironment}"
+        // stage ('Publish release in metadata') {
+        //     when {
+        //         expression {
+        //             (isStaging || isProduction)
+        //         }
+        //     }
+        //     steps {
+        //         script {
+        //             appName = "shop-sd-web"
+        //             echo "Deploying to production image with tag: " + "${imageTag} and to the namespace: ${k8sEnvironment}"
 
-                    k8sEnvironment = "staging"
+        //             k8sEnvironment = "staging"
 
-                    if (isProduction) {
-                        k8sEnvironment = "production"
-                        imageTag = associatedGitTag
-                    }
+        //             if (isProduction) {
+        //                 k8sEnvironment = "production"
+        //                 imageTag = associatedGitTag
+        //             }
 
-                    metadata.setMetadataEndpoint(k8sEnvironment)
-                    metadata.release(appName, imageTag, branch)
-                }
-            }
-            post {
-                success {
-                    script {
-                        slack.kubernetesNotifySuccess(k8sEnvironment, imageTag)
-                    }
-                }
-                failure {
-                    script {
-                        slack.kubernetesNotifyFailure(k8sEnvironment, imageTag)
-                    }
-                }
-            }
-        }
+        //             metadata.setMetadataEndpoint(k8sEnvironment)
+        //             metadata.release(appName, imageTag, branch)
+        //         }
+        //     }
+        //     post {
+        //         success {
+        //             script {
+        //                 slack.kubernetesNotifySuccess(k8sEnvironment, imageTag)
+        //             }
+        //         }
+        //         failure {
+        //             script {
+        //                 slack.kubernetesNotifyFailure(k8sEnvironment, imageTag)
+        //             }
+        //         }
+        //     }
+        // }
 
         // stage ('Docker Registry clean up') {
         //     when {

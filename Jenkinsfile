@@ -72,6 +72,7 @@ pipeline {
                         docker run --rm -m=4g \
                             -v $JENKINS_JOBS:/var/jenkins_home/jobs \
                             -e CI=true \
+                            --user node:node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-install \
                                 $NODE_IMAGE npm install --no-optional --registry http://172.21.97.98
@@ -94,6 +95,7 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
+                            --user node:node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run test
@@ -125,7 +127,7 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
-                            -e HOME=/home/node \
+                            --user node:node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build:sta
@@ -148,7 +150,7 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
-                            -e HOME=/home/node \
+                            --user node:node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build
@@ -182,6 +184,7 @@ pipeline {
                             -e ZENDESK_SUBDOMAIN=${ZENDESK_SUBDOMAIN} \
                             -e ZENDESK_EMAIL=${ZENDESK_USERNAME} \
                             -e ZENDESK_API_TOKEN=${ZENDESK_API_TOKEN} \
+                            --user node:node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npx -p @zendesk/zcli zcli apps:update dist

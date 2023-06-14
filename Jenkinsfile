@@ -27,7 +27,7 @@ pipeline {
     environment {
         BUILD_WORKSPACE = "${env.WORKSPACE.replace(env.JENKINS_JOBS, '/var/jenkins_home/jobs')}"
         DOCKER_CONTEXT_WORKSPACE = "${env.WORKSPACE}"
-        NODE_IMAGE = "eu.gcr.io/itg-mimercadona/node:16.14.0-1.0.0"
+        NODE_IMAGE = "node:18.16.0-slim"
     }
 
     stages {
@@ -125,7 +125,6 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
-                            -e HOME=/home/node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build:sta
@@ -148,7 +147,6 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
-                            -e HOME=/home/node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run build

@@ -7,9 +7,7 @@ const COPY_LIST = [
   "assets",
   "translations",
   "manifest.json",
-  env === "prod" 
-    ? "zcli.apps.config-prod.json" 
-    : "zcli.apps.config-sta.json",
+  "zcli.apps.config.json"
 ];
 
 const shouldBeCopied = (fileName) => COPY_LIST.includes(fileName);

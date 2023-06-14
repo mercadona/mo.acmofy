@@ -94,7 +94,6 @@ pipeline {
                             -e NODE_ENV='jenkins' \
                             -e CI=true \
                             -e NODE_IMAGE_VERSION=$NODE_IMAGE_VERSION \
-                            --user node:node \
                             --workdir $BUILD_WORKSPACE \
                             --name $BUILD_TAG-build $NODE_IMAGE \
                                 npm run test

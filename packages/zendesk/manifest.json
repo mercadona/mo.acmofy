@@ -12,7 +12,7 @@
       "ticket_sidebar": {
         "url": "assets/ticket_sidebar/index.html",
         "size": {
-          "height": "0px",
+          "height": "172px",
           "width": "340px"
         },
         "flexible": true

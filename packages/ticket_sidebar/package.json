@@ -20,6 +20,11 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "@zendeskgarden/react-accordions": "^8.69.0",
+    "@zendeskgarden/react-avatars": "^8.69.0",
+    "@zendeskgarden/react-grid": "^8.69.0",
+    "@zendeskgarden/react-theming": "^8.69.0",
+    "@zendeskgarden/react-typography": "^8.69.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

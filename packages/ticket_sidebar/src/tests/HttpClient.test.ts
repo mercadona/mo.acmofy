@@ -43,4 +43,17 @@ describe('HttpClient tests', () => {
       data: JSON.stringify(data),
     })
   })
+
+  it('should call client with correct parameters', async () => {
+    const zendeskURL = 'https://example.com'
+    const httpClient = new HttpClient(zafClient, zendeskURL)
+
+    await httpClient.get()
+
+    expect(zafClient.request).toHaveBeenCalledOnce()
+    expect(zafClient.request).toHaveBeenCalledWith({
+      url: 'https://example.com',
+      type: 'GET',
+    })
+  })
 })

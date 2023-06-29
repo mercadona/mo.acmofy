@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { Grid, Col, Row } from '@zendeskgarden/react-grid'
 import zafClient from '@app/zendesk/sdk'
 
 import { useConfig } from './context/ConfigProvider'
 import { TicketResponse } from './types'
 
+import OrderInfo from './components/OrderInfo'
 import './style.css'
 
 const App = () => {
@@ -37,26 +37,7 @@ const App = () => {
     getTicketInfo(orderId)
   }, [orderId])
 
-  return (
-    <Grid>
-      <Row>
-        <Col size={12}>Pedido {orderId}</Col>
-      </Row>
-      <Row
-        style={{
-          marginTop: 16,
-        }}
-        justifyContent={'center'}
-        alignItems={'center'}
-      >
-        <Col size={1}></Col>
-        <Col size={4}>Estado</Col>
-        <Col size={7}>
-          <div className="indicator__confirmed"></div>Confirmado
-        </Col>
-      </Row>
-    </Grid>
-  )
+  return <OrderInfo orderId={orderId} />
 }
 
 export default App

@@ -11,12 +11,38 @@ interface IMetadata<T> {
   settings?: T
 }
 
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+
+// https://developer.zendesk.com/api-reference/apps/apps-core-api/client_api/#clientrequestoptions
+interface RequestOptions {
+  accepts: object
+  autoRetry: boolean
+  cache: boolean
+  contentType: string | boolean
+  cors: boolean
+  crossDomain: boolean
+  data: object | string | Array<unknown>
+  dataType: 'text' | 'json'
+  headers: object
+  httpCompleteResponse: boolean
+  ifModified: boolean
+  jwt: object
+  mimeType: string
+  secure: boolean
+  timeout: number
+  traditional: boolean
+  type: HttpMethod
+  url: string
+  xhrFields: object
+}
+
 interface IClient {
   invoke: (cmd: string, arg: any) => void
   get: (getter: string) => any
   metadata: <U>() => Promise<IMetadata<U>>
-  request: <U>(data: object) => Promise<U>
+  request: <U>(options: Partial<RequestOptions>) => Promise<U>
   on: (eventName: string, listener: (...args: any) => any) => void
+  off: (eventName: string, listener?: (...args: any) => any) => void
 }
 
 declare global {

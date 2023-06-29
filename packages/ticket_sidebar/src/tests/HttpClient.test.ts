@@ -2,19 +2,6 @@ import { describe, expect, it, vi, afterEach } from 'vitest'
 import HttpClient from '../HttpClient'
 import zafClient from '@app/zendesk/sdk'
 
-vi.mock('@app/zendesk/sdk', async () => {
-  vi.stubGlobal('window', {
-    ZAFClient: {
-      init: vi.fn(),
-    },
-  })
-  return {
-    default: {
-      request: vi.fn(),
-    },
-  }
-})
-
 describe('HttpClient tests', () => {
   afterEach(() => {
     vi.clearAllMocks()

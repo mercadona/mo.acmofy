@@ -5,7 +5,6 @@ const { injectZafHtmlPlugin } = pluginPkg.default
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  test: {},
   plugins: [react(), injectZafHtmlPlugin()],
   base: './',
   build: {

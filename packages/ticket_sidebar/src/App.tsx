@@ -37,7 +37,7 @@ const App = () => {
     getTicketInfo(orderId)
   }, [orderId])
 
-  return <OrderInfo orderId={orderId} />
+  return orderId ? <OrderInfo orderId={orderId} /> : <p>Order not found</p>
 }
 
 export default App

@@ -1,12 +1,12 @@
-import minimist from "minimist";
-import { run } from "./util.mjs";
+import minimist from 'minimist'
+import { run } from './util.mjs'
 
 const {
   _: [app],
-} = minimist(process.argv.slice(2));
+} = minimist(process.argv.slice(2))
 
 run({
   pkg: `@app/${app}`,
-  cmd: "yarn dev",
+  cmd: 'npm run dev',
   cwd: `packages/${app}`,
-});
+})

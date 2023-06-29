@@ -12,4 +12,7 @@ export default defineConfig({
     outDir: `${process.env.INIT_CWD}/dist/assets/${process.env.ADDON_TYPE}`,
     emptyOutDir: true,
   },
+  server: {
+    port: 3000,
+  },
 })

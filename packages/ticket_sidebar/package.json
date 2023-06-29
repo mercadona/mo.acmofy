@@ -15,17 +15,25 @@
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
     "@vitejs/plugin-react": "^4.0.1",
+    "autoprefixer": "^10.4.14",
     "eslint": "^8.41.0",
+    "postcss": "^8.4.24",
+    "postcss-import": "^15.1.0",
+    "postcss-sass": "^0.5.0",
+    "postcss-scss": "^4.0.6",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "@zendeskgarden/css-bedrock": "^9.1.0",
     "@zendeskgarden/react-accordions": "^8.69.0",
     "@zendeskgarden/react-avatars": "^8.69.0",
+    "@zendeskgarden/react-buttons": "^8.69.0",
     "@zendeskgarden/react-grid": "^8.69.0",
     "@zendeskgarden/react-theming": "^8.69.0",
     "@zendeskgarden/react-typography": "^8.69.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sass": "^1.63.6"
   }
 }

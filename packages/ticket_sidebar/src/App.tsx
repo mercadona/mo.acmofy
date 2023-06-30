@@ -25,10 +25,12 @@ const App = () => {
     }
   }
 
+  const handleOrderIdChange = (orderId: string) => setOrderId(orderId)
+
   React.useEffect(() => {
     zafClient.on(
       `ticket.custom_field_${orderIdCustomFieldId}.changed`,
-      (orderId: string) => setOrderId(orderId)
+      handleOrderIdChange
     )
   }, [])
 

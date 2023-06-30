@@ -18,7 +18,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
   //   getOrderInfo(orderId)
   // }, [orderId])
 
-  if (!orderId) return
+  if (!orderId) return null
 
   return (
     <Grid>

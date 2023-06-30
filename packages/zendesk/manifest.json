@@ -10,6 +10,7 @@
   "location": {
     "support": {
       "ticket_sidebar": {
+        "autoHide": false,
         "url": "assets/ticket_sidebar/index.html",
         "size": {
           "height": "172px",

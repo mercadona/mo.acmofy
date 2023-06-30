@@ -8,15 +8,18 @@ import OrderInfo from './components/OrderInfo'
 import './style.css'
 
 const App = () => {
-  const { httpClient, orderIdCustomFieldId, idFieldMinLength } = useConfig()
+  const { httpClient, orderIdCustomFieldId, minimumOrderIdLength } = useConfig()
   const [orderId, setOrderId] = React.useState<string>()
 
   const getTicketInfo = async (orderId: string) => {
     try {
       const { ticket }: TicketResponse = await zafClient.get('ticket')
-      await httpClient.complete({
-        orderId,
-        ticketId: ticket.id,
+      await httpClient.request({
+        path: `tickets/${ticket.id}/complete/`,
+        data: {
+          order_id: orderId,
+          ticket_id: ticket.id,
+        },
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -35,7 +38,7 @@ const App = () => {
   }, [])
 
   React.useEffect(() => {
-    if (!orderId || orderId.length < idFieldMinLength) return
+    if (!orderId || orderId.length < minimumOrderIdLength) return
     getTicketInfo(orderId)
   }, [orderId])
 

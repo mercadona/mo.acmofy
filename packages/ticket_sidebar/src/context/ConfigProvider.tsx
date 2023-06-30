@@ -1,10 +1,10 @@
 import * as React from 'react'
-import HttpClient from '../HttpClient'
+import { HttpClient } from '../http'
 import zafClient from '@app/zendesk/sdk'
 
 type Config = {
   httpClient: HttpClient
-  idFieldMinLength: number
+  minimumOrderIdLength: number
   orderIdCustomFieldId: number
 }
 
@@ -34,7 +34,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 
     const value = {
       httpClient,
-      idFieldMinLength: MINIMUM_ORDER_ID_LENGTH,
+      minimumOrderIdLength: MINIMUM_ORDER_ID_LENGTH,
       orderIdCustomFieldId: ORDER_ID_CUSTOM_FIELD_ID,
     }
 

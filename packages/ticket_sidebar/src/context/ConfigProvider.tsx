@@ -22,7 +22,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
   const getConfig = async () => {
     const metadata = await zafClient.metadata<ZendeskConfig>()
 
-    if (!metadata.settings) return
+    if (!metadata.settings) return null
 
     const {
       URL_ZENDESK_HOOK,
@@ -45,7 +45,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     getConfig()
   }, [])
 
-  if (!config) return
+  if (!config) return null
 
   return (
     <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>

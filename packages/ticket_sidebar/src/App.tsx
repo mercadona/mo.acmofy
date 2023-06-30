@@ -5,6 +5,7 @@ import { useConfig } from './context/ConfigProvider'
 import { TicketResponse } from './types'
 
 import OrderInfo from './components/OrderInfo'
+import { ticketsClient } from './clients'
 import './style.css'
 
 const App = () => {
@@ -14,12 +15,9 @@ const App = () => {
   const getTicketInfo = async (orderId: string) => {
     try {
       const { ticket }: TicketResponse = await zafClient.get('ticket')
-      await httpClient.request({
-        path: `tickets/${ticket.id}/complete/`,
-        data: {
-          order_id: orderId,
-          ticket_id: ticket.id,
-        },
+      await ticketsClient.complete(httpClient, {
+        ticketId: ticket.id,
+        orderId,
       })
     } catch (error) {
       if (error instanceof Error) {

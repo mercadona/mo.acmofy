@@ -14,7 +14,7 @@ interface IMetadata<T> {
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 
 // https://developer.zendesk.com/api-reference/apps/apps-core-api/client_api/#clientrequestoptions
-interface RequestOptions {
+export interface RequestOptions {
   accepts: object
   autoRetry: boolean
   cache: boolean

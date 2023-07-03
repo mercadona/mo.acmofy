@@ -1,5 +1,7 @@
 import { Grid, Col, Row } from '@zendeskgarden/react-grid'
-import { Indicator, OrderStatus } from './styled'
+import type { OrderStatus as OrderStatusType } from './styled'
+import OrderStatus from './OrderStatus'
+import { styled } from 'styled-components'
 
 type OrderInfoProps = {
   orderId: string | undefined
@@ -20,16 +22,20 @@ const STATES: Array<{ [key: string]: string }> = [
 
 const getRandomState = (
   states: typeof STATES
-): { text: string; value: OrderStatus } => {
+): { text: string; status: OrderStatusType } => {
   const idx = Math.floor(Math.random() * Object.keys(states).length)
 
   const state = Object.keys(STATES[idx])[0]
 
   return {
     text: state,
-    value: states[idx][state] as OrderStatus,
+    status: states[idx][state] as OrderStatusType,
   }
 }
+
+const Separator = styled.hr`
+  color: var(--zd-color-grey-200);
+`
 
 const OrderInfo = ({ orderId }: OrderInfoProps) => {
   // const [order, setOrder] = React.useState()
@@ -46,37 +52,17 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
 
   if (!orderId) return null
 
-  const { text, value } = getRandomState(STATES)
+  const { text, status } = getRandomState(STATES)
 
   return (
-    <Grid>
+    <Grid gutters={false}>
       <Row>
         <Col className="title" size={12}>
           Pedido {orderId}
         </Col>
       </Row>
-      <Row
-        style={{
-          marginTop: 14,
-        }}
-        justifyContent={'center'}
-        alignItems={'center'}
-      >
-        <Col size={1}></Col>
-        <Col className="state" size={4}>
-          Estado
-        </Col>
-        <Col
-          size={7}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Indicator $type={value} />
-          {text}
-        </Col>
-      </Row>
+      <OrderStatus status={status} text={text} />
+      <Separator />
     </Grid>
   )
 }

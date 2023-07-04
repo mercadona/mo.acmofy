@@ -1,7 +1,7 @@
 @import '@zendeskgarden/css-bedrock';
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--zd-font-family-system);
   line-height: 1.5;
   font-weight: 400;
 
@@ -34,4 +34,8 @@
 
 .state {
   color: var(--zd-color-grey-600);
+}
+
+.bold {
+  font-weight: bold;
 }

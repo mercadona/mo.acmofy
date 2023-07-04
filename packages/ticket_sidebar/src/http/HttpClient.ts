@@ -3,11 +3,6 @@ import type { RequestOptions } from '@app/zendesk/sdk'
 
 type ZendeskClient = typeof zafClient
 
-// type TicketInfo = {
-//   orderId: string
-//   ticketId: number
-// }
-
 type PartialRequestOptions = Partial<RequestOptions> & { path?: string }
 
 // replace :: RegExp -> String -> String -> String
@@ -24,7 +19,7 @@ class HttpClient {
     this.zendeskURL = replaceLastSlash(zendeskURL)
   }
 
-  request(options: PartialRequestOptions): Promise<unknown> {
+  request<T = unknown>(options: PartialRequestOptions): Promise<T> {
     const defaultSettings: PartialRequestOptions = {
       url: this.zendeskURL,
       type: 'GET',
@@ -46,11 +41,8 @@ class HttpClient {
       ...requestSettings,
     }
 
-    return this.client.request(settings)
+    return this.client.request<T>(settings)
   }
 }
 
 export { HttpClient }
-
-// URL: http://34.110.237.158/api/acmo
-// Field Id: 360017010219

@@ -1,4 +1,4 @@
-type Ticket = {
+export type Ticket = {
   id: number
 }
 

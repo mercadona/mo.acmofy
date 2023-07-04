@@ -21,6 +21,8 @@ export type OrderStatus =
 
 export type Order = {
   status: OrderStatus
+  phone_country_code: number
+  phone_number: number
 }
 
 export type Settings = {

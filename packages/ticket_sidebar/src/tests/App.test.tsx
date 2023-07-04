@@ -18,7 +18,11 @@ describe('Tests for App component', () => {
           default: {
             request: vi.fn(),
             on: vi.fn(),
-            get: vi.fn(),
+            get: vi.fn().mockResolvedValue({
+              ticket: {
+                id: 1,
+              },
+            }),
             metadata: vi.fn().mockResolvedValue({
               settings: {
                 URL_ZENDESK_HOOK: 'https://example.com/api',
@@ -34,7 +38,9 @@ describe('Tests for App component', () => {
     it('should render App', async () => {
       render(<App />)
 
-      expect(await screen.findByText(/order/i)).toBeInTheDocument()
+      expect(
+        await screen.findByText(/introduce un pedido para continuar/i)
+      ).toBeInTheDocument()
     })
   })
 })

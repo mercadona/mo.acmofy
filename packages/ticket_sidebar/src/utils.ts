@@ -6,7 +6,7 @@ export const hasLengthGreaterOrEqualThan: hasGreaterOrEqualFn =
     str.length >= len
 
 const STATUS_MAP = new Map<OrderStatus, string>([
-  ['checkout', 'Checkout'],
+  ['checkout', 'Checkout in progress'],
   ['confirmed', 'Confirmed'],
   ['preparing', 'Preparing'],
   ['prepared', 'Prepared'],

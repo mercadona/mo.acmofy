@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Grid, Col, Row } from '@zendeskgarden/react-grid'
 import OrderStatus from './OrderStatus'
-import { styled } from 'styled-components'
 import { Order } from '../types'
 import { useConfig } from '../context/ConfigProvider'
 import { ordersClient } from '../clients'
@@ -10,10 +9,6 @@ import { hasLengthGreaterOrEqualThan } from '../utils'
 type OrderInfoProps = {
   orderId: string | undefined
 }
-
-const Separator = styled.hr`
-  color: var(--zd-color-grey-200);
-`
 
 const OrderInfo = ({ orderId }: OrderInfoProps) => {
   const [order, setOrder] = React.useState<Order>({} as Order)
@@ -48,8 +43,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
           Pedido {orderId}
         </Col>
       </Row>
-      <OrderStatus status={order.status} text={order.status} />
-      <Separator />
+      <OrderStatus order={order} />
     </Grid>
   )
 }

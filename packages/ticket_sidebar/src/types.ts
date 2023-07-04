@@ -7,6 +7,22 @@ export type TicketResponse = {
   ticket: Ticket
 }
 
+export type OrderStatus =
+  | 'checkout'
+  | 'confirmed'
+  | 'preparing'
+  | 'prepared'
+  | 'delivering'
+  | 'delivered'
+  | 'cancelled_by_customer'
+  | 'cancelled_by_system'
+  | 'user_unreachable'
+  | 'delayed'
+
+export type Order = {
+  status: OrderStatus
+}
+
 export type Settings = {
   MINIMUM_ORDER_ID_LENGTH: number
   URL_ZENDESK_HOOK: string

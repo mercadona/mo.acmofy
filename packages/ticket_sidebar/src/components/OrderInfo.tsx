@@ -1,36 +1,14 @@
+import * as React from 'react'
 import { Grid, Col, Row } from '@zendeskgarden/react-grid'
-import type { OrderStatus as OrderStatusType } from './styled'
 import OrderStatus from './OrderStatus'
 import { styled } from 'styled-components'
+import { Order } from '../types'
+import { useConfig } from '../context/ConfigProvider'
+import { ordersClient } from '../clients'
+import { hasLengthGreaterOrEqualThan } from '../utils'
 
 type OrderInfoProps = {
   orderId: string | undefined
-}
-
-const STATES: Array<{ [key: string]: string }> = [
-  { Checkout: 'checkout' },
-  { Confirmado: 'confirmed' },
-  { Preparando: 'preparing' },
-  { Preparado: 'prepared' },
-  { Entregando: 'delivering' },
-  { Entregado: 'delivered' },
-  { 'Cancelado por el cliente': 'cancelled_by_customer' },
-  { 'Cancelado por el sistema': 'cancelled_by_system' },
-  { 'Usuario no disponible': 'user_unreachable' },
-  { Atrasado: 'delayed' },
-]
-
-const getRandomState = (
-  states: typeof STATES
-): { text: string; status: OrderStatusType } => {
-  const idx = Math.floor(Math.random() * Object.keys(states).length)
-
-  const state = Object.keys(STATES[idx])[0]
-
-  return {
-    text: state,
-    status: states[idx][state] as OrderStatusType,
-  }
 }
 
 const Separator = styled.hr`
@@ -38,21 +16,30 @@ const Separator = styled.hr`
 `
 
 const OrderInfo = ({ orderId }: OrderInfoProps) => {
-  // const [order, setOrder] = React.useState()
+  const [order, setOrder] = React.useState<Order>({} as Order)
+  const { httpClient, minimumOrderIdLength } = useConfig()
 
-  // const getOrderInfo = (orderId: string) => {
-  //   // TODO: Call endpoint to retrieve order info
-  // }
+  const getOrderInfo = async (orderId: string) => {
+    try {
+      const order = await ordersClient.getOrderDetail<Order>(
+        httpClient,
+        orderId
+      )
+      setOrder(order)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
-  // React.useEffect(() => {
-  //   if (!orderId) return
+  React.useEffect(() => {
+    const hasLengthGreaterOrEqualN =
+      hasLengthGreaterOrEqualThan(minimumOrderIdLength)
+    if (!(orderId && hasLengthGreaterOrEqualN(orderId))) return
 
-  //   getOrderInfo(orderId)
-  // }, [orderId])
+    getOrderInfo(orderId)
+  }, [orderId])
 
   if (!orderId) return null
-
-  const { text, status } = getRandomState(STATES)
 
   return (
     <Grid gutters={false}>
@@ -61,7 +48,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
           Pedido {orderId}
         </Col>
       </Row>
-      <OrderStatus status={status} text={text} />
+      <OrderStatus status={order.status} text={order.status} />
       <Separator />
     </Grid>
   )

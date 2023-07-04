@@ -1,6 +1,7 @@
 import { Row, Col } from '@zendeskgarden/react-grid'
 import { Indicator } from './styled'
-import type { OrderStatus } from './styled'
+import type { OrderStatus } from '../types'
+import { getOrderStatus } from '../utils'
 
 type OrderStatusProps = {
   status: OrderStatus
@@ -8,6 +9,8 @@ type OrderStatusProps = {
 }
 
 const OrderStatus = ({ status, text }: OrderStatusProps) => {
+  const capitalizedText = getOrderStatus(text as OrderStatus)
+
   return (
     <Row
       style={{
@@ -28,7 +31,7 @@ const OrderStatus = ({ status, text }: OrderStatusProps) => {
         }}
       >
         <Indicator $type={status} />
-        {text}
+        {capitalizedText}
       </Col>
     </Row>
   )

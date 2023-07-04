@@ -1,16 +1,5 @@
 import styled, { css } from 'styled-components'
-
-export type OrderStatus =
-  | 'checkout'
-  | 'confirmed'
-  | 'preparing'
-  | 'prepared'
-  | 'delivering'
-  | 'delivered'
-  | 'cancelled_by_customer'
-  | 'cancelled_by_system'
-  | 'user_unreachable'
-  | 'delayed'
+import type { OrderStatus } from '../../types'
 
 const Indicator = styled.div<{ $type: OrderStatus }>`
   width: 12px;

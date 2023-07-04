@@ -24,6 +24,6 @@ describe('getOrderStatus tests', () => {
     const status = 'checkout' as const
     const resultStatus = getOrderStatus(status)
 
-    expect(resultStatus).toBe('Checkout')
+    expect(resultStatus).toBe('Checkout in progress')
   })
 })

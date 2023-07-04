@@ -51,7 +51,11 @@ const App = () => {
     getOrderInfo(orderId)
   }, [orderId])
 
-  return orderId ? <OrderInfo orderId={orderId} /> : <p>Order not found</p>
+  return orderId ? (
+    <OrderInfo orderId={orderId} />
+  ) : (
+    <p className="bold">Introduce un pedido para continuar</p>
+  )
 }
 
 export default App

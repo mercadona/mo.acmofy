@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { hasLengthGreaterOrEqualThan } from '../utils'
+import { hasLengthGreaterOrEqualThan, getOrderStatus } from '../utils'
 
 describe('hasLengthGreaterOrEqual tests', () => {
   it('should be true if length is greater or equal than 6', () => {
@@ -16,5 +16,14 @@ describe('hasLengthGreaterOrEqual tests', () => {
     const str = '78088'
 
     expect(greaterOrEqualThan6(str)).toBeFalsy()
+  })
+})
+
+describe('getOrderStatus tests', () => {
+  it('returns corresponding string', () => {
+    const status = 'checkout' as const
+    const resultStatus = getOrderStatus(status)
+
+    expect(resultStatus).toBe('Checkout')
   })
 })

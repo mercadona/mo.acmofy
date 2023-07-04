@@ -17,7 +17,7 @@ const Indicator = styled.div<{ $type: OrderStatus }>`
       }
       case 'checkout': {
         return css`
-          background-color: var(--zd-color-grey-800);
+          background-color: var(--zd-color-grey-400);
         `
       }
       case 'preparing': {

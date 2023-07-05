@@ -14,9 +14,14 @@ type ZendeskConfig = {
   ORDER_ID_CUSTOM_FIELD_ID: number
 }
 
-const ConfigContext = React.createContext<Config>({} as Config)
+const ConfigContext = React.createContext<Config | null>(null)
+ConfigContext.displayName = 'ConfigContext'
 
-export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
+export const ConfigProvider = ({
+  children,
+}: {
+  children: React.ReactChildren | React.ReactNode
+}) => {
   const [config, setConfig] = React.useState<Config>()
 
   const getConfig = async () => {

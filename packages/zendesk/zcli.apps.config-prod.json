@@ -3,6 +3,6 @@
   "parameters": {
     "MINIMUM_ORDER_ID_LENGTH": 8,
     "ORDER_ID_CUSTOM_FIELD_ID": 360012062392,
-    "URL_ZENDESK_HOOK": "https://zendeskhook.mercadona.es/zendesk-hook"
+    "URL_ZENDESK_HOOK": "https://zendeskhook.mercadona.es/api/acmo/"
   }
 }

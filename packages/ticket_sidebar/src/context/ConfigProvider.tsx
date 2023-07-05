@@ -53,6 +53,7 @@ export const ConfigProvider = ({
   if (!config) return null
 
   return (
+    // @ts-ignore
     <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
   )
 }

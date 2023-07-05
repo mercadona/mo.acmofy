@@ -51,7 +51,7 @@ const App = () => {
     getOrderInfo(orderId)
   }, [orderId])
 
-  return orderId ? (
+  return orderId && orderId.length >= minimumOrderIdLength ? (
     <OrderInfo orderId={orderId} />
   ) : (
     <p className="bold">Introduce un pedido para continuar</p>

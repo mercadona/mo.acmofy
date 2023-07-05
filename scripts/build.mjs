@@ -12,8 +12,8 @@ run({
   pkg: '@app/zendesk',
   cmd:
     process.platform === 'win32'
-      ? `set ENV=${env}&& set APPS=${restArgsStr}&& npm run build`
-      : `ENV=${env} APPS='${restArgsStr}' npm run build`,
+      ? `set ENV=${env}&& set APPS=${restArgsStr}&& yarn build`
+      : `ENV=${env} APPS='${restArgsStr}' yarn build`,
   cwd: 'packages/zendesk',
 })
 
@@ -47,8 +47,8 @@ if (env !== 'local') {
       pkg: `@app/${appLocation}`,
       cmd:
         process.platform === 'win32'
-          ? `set ADDON_TYPE=${appLocation}&& npm run build`
-          : `ADDON_TYPE=${appLocation} npm run build`,
+          ? `set ADDON_TYPE=${appLocation}&& yarn build`
+          : `ADDON_TYPE=${appLocation} yarn build`,
       cwd: `packages/${appLocation}`,
     })
   }

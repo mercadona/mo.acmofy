@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { HttpClient } from '../http'
 import zafClient from '@app/zendesk/sdk'
+import { ALLOWED_EMAILS } from '../constants'
 
 type Config = {
   httpClient: HttpClient
@@ -14,7 +15,16 @@ type ZendeskConfig = {
   ORDER_ID_CUSTOM_FIELD_ID: number
 }
 
-const ConfigContext = React.createContext<Config | null>(null)
+type CurrentUserEmailResponse = {
+  errors: object
+  'currentUser.email': string
+}
+
+type IsBetaTester = {
+  isBetaTester: boolean
+}
+
+const ConfigContext = React.createContext<(Config & IsBetaTester) | null>(null)
 ConfigContext.displayName = 'ConfigContext'
 
 export const ConfigProvider = ({
@@ -23,6 +33,7 @@ export const ConfigProvider = ({
   children: React.ReactChildren | React.ReactNode
 }) => {
   const [config, setConfig] = React.useState<Config>()
+  const [isBetaTester, setIsBetaTester] = React.useState(false)
 
   const getConfig = async () => {
     const metadata = await zafClient.metadata<ZendeskConfig>()
@@ -46,15 +57,31 @@ export const ConfigProvider = ({
     setConfig(value)
   }
 
+  const isBetaTesterUser = async () => {
+    try {
+      const userEmailResponse: CurrentUserEmailResponse = await zafClient.get(
+        'currentUser.email'
+      )
+      const email = userEmailResponse['currentUser.email']
+      setIsBetaTester(ALLOWED_EMAILS.includes(email))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   React.useEffect(() => {
     getConfig()
   }, [])
+
+  React.useEffect(() => void isBetaTesterUser(), [])
 
   if (!config) return null
 
   return (
     // @ts-ignore
-    <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
+    <ConfigContext.Provider value={{ ...config, isBetaTester }}>
+      {children}
+    </ConfigContext.Provider>
   )
 }
 

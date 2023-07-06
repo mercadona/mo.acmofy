@@ -35,6 +35,23 @@ const App = () => {
     }
   }
 
+  const getOrderId = async () => {
+    try {
+      const response = await zafClient.get(
+        `ticket.customField:custom_field_${orderIdCustomFieldId}`
+      )
+
+      const key = `ticket.customField:custom_field_${orderIdCustomFieldId}`
+      if (key in response) {
+        if (response[key] !== '') {
+          setOrderId(response[key])
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const handleOrderIdChange = (orderId: string) => setOrderId(orderId)
 
   React.useEffect(() => {
@@ -45,6 +62,8 @@ const App = () => {
   }, [])
 
   React.useEffect(() => void getTicketInfo(), [])
+
+  React.useEffect(() => void getOrderId(), [])
 
   React.useEffect(() => {
     if (!orderId || orderId.length < minimumOrderIdLength) return

@@ -16,8 +16,8 @@ vi.mock('@app/zendesk/sdk', () => {
         },
       }),
       get: vi.fn(),
-      on: vi.fn(),
-      request: vi.fn(),
+      on: vi.fn().mockReturnValue(true),
+      request: vi.fn().mockResolvedValue(true),
     },
   }
 })
@@ -59,8 +59,6 @@ describe('Tests for App component', () => {
           })
         }
       })
-      client.on.mockImplementation(() => true)
-      client.request.mockResolvedValue(true)
 
       render(<App />)
 
@@ -94,8 +92,7 @@ describe('Tests for App component', () => {
           })
         }
       })
-      client.on.mockImplementation(() => true)
-      client.request.mockResolvedValue(true)
+
       render(<App />)
 
       const initialText = await screen.findByText(

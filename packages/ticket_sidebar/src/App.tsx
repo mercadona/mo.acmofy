@@ -13,7 +13,7 @@ const App = () => {
   const [orderId, setOrderId] = React.useState<string>()
   const [ticket, setTicket] = React.useState<Ticket>({} as Ticket)
 
-  const getOrderInfo = async (orderId: string) => {
+  const fillTicketInfo = async (orderId: string) => {
     try {
       await ticketsClient.complete(httpClient, {
         ticketId: ticket.id,
@@ -67,7 +67,7 @@ const App = () => {
 
   React.useEffect(() => {
     if (!orderId || orderId.length < minimumOrderIdLength) return
-    getOrderInfo(orderId)
+    fillTicketInfo(orderId)
   }, [orderId])
 
   return orderId && orderId.length >= minimumOrderIdLength ? (

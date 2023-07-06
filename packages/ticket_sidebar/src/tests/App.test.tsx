@@ -1,41 +1,67 @@
-import { vi } from 'vitest'
 import { render, screen } from '../utils/test-utils'
 
 import App from '../App'
+import { Mocked, expect } from 'vitest'
+import zafClient from '@app/zendesk/sdk'
+import { vi } from 'vitest'
 
-afterEach(() => {
-  vi.unstubAllGlobals()
-})
-
-beforeAll(() => {
-  vi.mock('@app/zendesk/sdk', () => {
-    vi.stubGlobal('ZAFClient', {
-      init: vi.fn(),
-    })
-    return {
-      default: {
-        request: vi.fn(),
-        on: vi.fn().mockImplementation((_, cb) => cb('1234')),
-        get: vi.fn().mockResolvedValue({
-          ticket: {
-            id: 1,
-          },
-        }),
-        metadata: vi.fn().mockResolvedValue({
-          settings: {
-            URL_ZENDESK_HOOK: 'https://example.com/api',
-            MINIMUM_ORDER_ID_LENGTH: 5,
-            ORDER_ID_CUSTOM_FIELD_ID: '1234567',
-          },
-        }),
-      },
-    }
-  })
+vi.mock('@app/zendesk/sdk', () => {
+  return {
+    default: {
+      metadata: vi.fn().mockResolvedValue({
+        settings: {
+          URL_ZENDESK_HOOK: 'https://example.com/api',
+          MINIMUM_ORDER_ID_LENGTH: 5,
+          ORDER_ID_CUSTOM_FIELD_ID: '1234567',
+        },
+      }),
+      get: vi.fn(),
+      on: vi.fn(),
+      request: vi.fn(),
+    },
+  }
 })
 
 describe('Tests for App component', () => {
+  let client: Mocked<typeof zafClient>
+
+  beforeAll(() => {
+    client = zafClient as Mocked<typeof zafClient>
+  })
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   describe('when app starts', () => {
     it('should render App', async () => {
+      client.get.mockImplementation((what: string) => {
+        if (what === 'currentUser.email') {
+          return Promise.resolve({
+            errors: [],
+            'currentUser.email': 'sgarcal123456@mercadona.es',
+          })
+        }
+
+        if (what === 'ticket.customField:custom_field_1234567') {
+          return Promise.resolve({
+            errors: [],
+            'ticket.customField:custom_field_1234567': '',
+          })
+        }
+
+        if (what === 'ticket') {
+          return Promise.resolve({
+            errors: [],
+            ticket: {
+              id: 12345,
+            },
+          })
+        }
+      })
+      client.on.mockImplementation(() => true)
+      client.request.mockResolvedValue(true)
+
       render(<App />)
 
       expect(
@@ -44,12 +70,113 @@ describe('Tests for App component', () => {
     })
 
     it('should not show OrderInfo if orderId is less than MINIMUM_ORDER_ID_LENGTH', async () => {
+      client.get.mockImplementation((what: string) => {
+        if (what === 'currentUser.email') {
+          return Promise.resolve({
+            errors: [],
+            'currentUser.email': 'sgarcal123456@mercadona.es',
+          })
+        }
+
+        if (what === 'ticket.customField:custom_field_1234567') {
+          return Promise.resolve({
+            errors: [],
+            'ticket.customField:custom_field_1234567': '1234',
+          })
+        }
+
+        if (what === 'ticket') {
+          return Promise.resolve({
+            errors: [],
+            ticket: {
+              id: 12345,
+            },
+          })
+        }
+      })
+      client.on.mockImplementation(() => true)
+      client.request.mockResolvedValue(true)
       render(<App />)
 
       const initialText = await screen.findByText(
         /introduce un pedido para continuar/i
       )
       expect(initialText).toBeInTheDocument()
+    })
+
+    it('should display Order information', async () => {
+      client.get.mockImplementation((what: string) => {
+        if (what === 'currentUser.email') {
+          return Promise.resolve({
+            errors: [],
+            'currentUser.email': 'sgarcal123456@mercadona.es',
+          })
+        }
+
+        if (what === 'ticket.customField:custom_field_1234567') {
+          return Promise.resolve({
+            errors: [],
+            'ticket.customField:custom_field_1234567': '',
+          })
+        }
+
+        if (what === 'ticket') {
+          return Promise.resolve({
+            errors: [],
+            ticket: {
+              id: 12345,
+            },
+          })
+        }
+      })
+      client.on.mockImplementation((_: string, cb: (orderId: string) => void) =>
+        cb('21123')
+      )
+      client.request.mockResolvedValue({
+        status: 'checkout',
+        phone_country_code: '34',
+        phone_number: '66666666',
+      })
+
+      render(<App />)
+
+      expect(await screen.findByText(/Pedido 21123/i)).toBeInTheDocument()
+      expect(await screen.findByText(/\+34 66666666/i)).toBeInTheDocument()
+    })
+
+    describe('when User is not a Beta Tester', () => {
+      it('should not display anything', async () => {
+        client.get.mockImplementation((what: string) => {
+          if (what === 'currentUser.email') {
+            return Promise.resolve({
+              errors: [],
+              'currentUser.email': 'rgarci12@mercadona.es',
+            })
+          }
+
+          if (what === 'ticket.customField:custom_field_1234567') {
+            return Promise.resolve({
+              errors: [],
+              'ticket.customField:custom_field_1234567': '123455',
+            })
+          }
+
+          if (what === 'ticket') {
+            return Promise.resolve({
+              errors: [],
+              ticket: {
+                id: 12345,
+              },
+            })
+          }
+        })
+        render(<App />)
+
+        const initialText = screen.queryByText(
+          /introduce un pedido para continuar/i
+        )
+        expect(initialText).not.toBeInTheDocument()
+      })
     })
   })
 })

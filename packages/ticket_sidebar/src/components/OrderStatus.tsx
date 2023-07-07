@@ -51,7 +51,7 @@ const OrderStatus = ({ order }: OrderStatusProps) => {
             alignItems: 'center',
           }}
         >
-          {`+${order.phone_country_code} ${order.phone_number}`}
+          {`+${order.phone_country_code}${order.phone_number}`}
         </Col>
       </Row>
     </>

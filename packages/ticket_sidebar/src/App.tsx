@@ -71,11 +71,7 @@ const App = () => {
   }, [orderId])
 
   return orderId && orderId.length >= minimumOrderIdLength ? (
-    <OrderInfo
-      orderId={orderId}
-      ticketId={ticket.id}
-      requesterId={ticket.requester && ticket.requester.id}
-    />
+    <OrderInfo orderId={orderId} />
   ) : (
     <p className="bold">Introduce un pedido para continuar</p>
   )

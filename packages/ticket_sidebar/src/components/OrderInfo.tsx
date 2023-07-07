@@ -5,18 +5,14 @@ import { Order } from '../types'
 import { useConfig } from '../context/ConfigProvider'
 import { ordersClient } from '../clients'
 import { hasLengthGreaterOrEqualThan } from '../utils'
-import zafClient from '@app/zendesk/sdk'
-import { Button } from '@zendeskgarden/react-buttons'
 
 type OrderInfoProps = {
   orderId: string | undefined
-  ticketId: number
-  requesterId: number
 }
 
-const OrderInfo = ({ orderId, ticketId, requesterId }: OrderInfoProps) => {
+const OrderInfo = ({ orderId }: OrderInfoProps) => {
   const [order, setOrder] = React.useState<Order>({} as Order)
-  const { httpClient, minimumOrderIdLength, isBetaTester } = useConfig()
+  const { httpClient, minimumOrderIdLength } = useConfig()
 
   const getOrderInfo = async (orderId: string) => {
     try {

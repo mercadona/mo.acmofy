@@ -17,9 +17,9 @@ export type OrderStatus =
   | 'prepared'
   | 'delivering'
   | 'delivered'
-  | 'cancelled_by_customer'
-  | 'cancelled_by_system'
-  | 'user_unreachable'
+  | 'cancelled-by-customer'
+  | 'cancelled-by-system'
+  | 'user-unreachable'
   | 'delayed'
 
 export type Order = {

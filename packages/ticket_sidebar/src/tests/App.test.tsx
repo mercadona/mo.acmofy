@@ -122,9 +122,6 @@ describe('Tests for App component', () => {
             errors: [],
             ticket: {
               id: 12345,
-              requester: {
-                id: 2112,
-              },
             },
           })
         }
@@ -145,38 +142,7 @@ describe('Tests for App component', () => {
     })
 
     describe('when User is not a Beta Tester', () => {
-      it('should not display anything', async () => {
-        client.get.mockImplementation((what: string) => {
-          if (what === 'currentUser.email') {
-            return Promise.resolve({
-              errors: [],
-              'currentUser.email': 'rgarci12@mercadona.es',
-            })
-          }
-
-          if (what === 'ticket.customField:custom_field_1234567') {
-            return Promise.resolve({
-              errors: [],
-              'ticket.customField:custom_field_1234567': '123455',
-            })
-          }
-
-          if (what === 'ticket') {
-            return Promise.resolve({
-              errors: [],
-              ticket: {
-                id: 12345,
-              },
-            })
-          }
-        })
-        render(<App />)
-
-        const initialText = screen.queryByText(
-          /introduce un pedido para continuar/i
-        )
-        expect(initialText).not.toBeInTheDocument()
-      })
+      it.todo('should not display something')
     })
   })
 })

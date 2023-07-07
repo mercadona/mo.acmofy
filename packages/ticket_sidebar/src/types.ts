@@ -1,5 +1,8 @@
 export type Ticket = {
   id: number
+  requester: {
+    id: number // This is possibly undefined
+  }
 }
 
 export type TicketResponse = {

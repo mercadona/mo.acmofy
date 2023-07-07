@@ -54,18 +54,12 @@ const App = () => {
 
   const handleOrderIdChange = (orderId: string) => setOrderId(orderId)
 
-  const handleCallError = (e: unknown) => {
-    console.error(e)
-  }
-
   React.useEffect(() => {
     zafClient.on(
       `ticket.custom_field_${orderIdCustomFieldId}.changed`,
       handleOrderIdChange
     )
   }, [])
-
-  React.useEffect(() => void zafClient.on('voice.error', handleCallError), [])
 
   React.useEffect(() => void getTicketInfo(), [])
 

@@ -30,15 +30,6 @@ const OrderInfo = ({ orderId, ticketId, requesterId }: OrderInfoProps) => {
     }
   }
 
-  const callClient = () => {
-    zafClient.trigger('voice.dialout', {
-      number: `+${order.phone_country_code}${order.phone_number}`,
-      from: 'ticket_editor',
-      userId: requesterId,
-      ticketId: ticketId,
-    })
-  }
-
   React.useEffect(() => {
     const hasLengthGreaterOrEqualN =
       hasLengthGreaterOrEqualThan(minimumOrderIdLength)
@@ -57,15 +48,6 @@ const OrderInfo = ({ orderId, ticketId, requesterId }: OrderInfoProps) => {
         </Col>
       </Row>
       <OrderStatus order={order} />
-      {isBetaTester && (
-        <Row>
-          <Col size={6} offset={1}>
-            <Button size="small" style={{ marginLeft: 4 }} onClick={callClient}>
-              Llamar
-            </Button>
-          </Col>
-        </Row>
-      )}
     </Grid>
   )
 }

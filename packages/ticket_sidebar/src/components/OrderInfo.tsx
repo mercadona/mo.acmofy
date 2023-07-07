@@ -5,12 +5,16 @@ import { Order } from '../types'
 import { useConfig } from '../context/ConfigProvider'
 import { ordersClient } from '../clients'
 import { hasLengthGreaterOrEqualThan } from '../utils'
+import zafClient from '@app/zendesk/sdk'
+import { Button } from '@zendeskgarden/react-buttons'
 
 type OrderInfoProps = {
   orderId: string | undefined
+  ticketId: number
+  requesterId: number
 }
 
-const OrderInfo = ({ orderId }: OrderInfoProps) => {
+const OrderInfo = ({ orderId, ticketId, requesterId }: OrderInfoProps) => {
   const [order, setOrder] = React.useState<Order>({} as Order)
   const { httpClient, minimumOrderIdLength } = useConfig()
 
@@ -24,6 +28,15 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const callClient = () => {
+    zafClient.trigger('voice.dialout', {
+      number: `+${order.phone_country_code}${order.phone_number}`,
+      from: 'ticket_editor',
+      userId: requesterId,
+      ticketId: ticketId,
+    })
   }
 
   React.useEffect(() => {
@@ -44,6 +57,13 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
         </Col>
       </Row>
       <OrderStatus order={order} />
+      <Row>
+        <Col size={6} offset={1}>
+          <Button size="small" style={{ marginLeft: 4 }} onClick={callClient}>
+            Llamar
+          </Button>
+        </Col>
+      </Row>
     </Grid>
   )
 }

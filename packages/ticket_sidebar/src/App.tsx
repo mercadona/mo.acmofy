@@ -59,12 +59,18 @@ const App = () => {
 
   const handleOrderIdChange = (orderId: string) => setOrderId(orderId)
 
+  const handleCallError = (e: unknown) => {
+    console.error(e)
+  }
+
   React.useEffect(() => {
     zafClient.on(
       `ticket.custom_field_${orderIdCustomFieldId}.changed`,
       handleOrderIdChange
     )
   }, [])
+
+  React.useEffect(() => void zafClient.on('voice.error', handleCallError), [])
 
   React.useEffect(() => void getTicketInfo(), [])
 
@@ -80,7 +86,11 @@ const App = () => {
   }
 
   return orderId && orderId.length >= minimumOrderIdLength ? (
-    <OrderInfo orderId={orderId} />
+    <OrderInfo
+      orderId={orderId}
+      ticketId={ticket.id}
+      requesterId={ticket.requester.id}
+    />
   ) : (
     <p className="bold">Introduce un pedido para continuar</p>
   )

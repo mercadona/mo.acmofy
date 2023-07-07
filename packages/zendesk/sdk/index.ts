@@ -43,6 +43,7 @@ interface IClient {
   request: <U>(options: Partial<RequestOptions>) => Promise<U>
   on: (eventName: string, listener: (...args: any) => any) => void
   off: (eventName: string, listener?: (...args: any) => any) => void
+  trigger: (eventName: string, options: object) => void
 }
 
 declare global {

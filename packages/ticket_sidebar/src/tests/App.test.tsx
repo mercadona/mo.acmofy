@@ -122,6 +122,9 @@ describe('Tests for App component', () => {
             errors: [],
             ticket: {
               id: 12345,
+              requester: {
+                id: 2112,
+              },
             },
           })
         }
@@ -138,7 +141,7 @@ describe('Tests for App component', () => {
       render(<App />)
 
       expect(await screen.findByText(/Pedido 21123/i)).toBeInTheDocument()
-      expect(await screen.findByText(/\+34 66666666/i)).toBeInTheDocument()
+      expect(await screen.findByText(/\+3466666666/i)).toBeInTheDocument()
     })
 
     describe('when User is not a Beta Tester', () => {

@@ -9,12 +9,7 @@ import { ticketsClient } from './clients'
 import './style.css'
 
 const App = () => {
-  const {
-    httpClient,
-    orderIdCustomFieldId,
-    minimumOrderIdLength,
-    isBetaTester,
-  } = useConfig()
+  const { httpClient, orderIdCustomFieldId, minimumOrderIdLength } = useConfig()
   const [orderId, setOrderId] = React.useState<string>()
   const [ticket, setTicket] = React.useState<Ticket>({} as Ticket)
 
@@ -81,15 +76,11 @@ const App = () => {
     fillTicketInfo(orderId)
   }, [orderId])
 
-  if (!isBetaTester) {
-    return null
-  }
-
   return orderId && orderId.length >= minimumOrderIdLength ? (
     <OrderInfo
       orderId={orderId}
       ticketId={ticket.id}
-      requesterId={ticket.requester.id}
+      requesterId={ticket.requester && ticket.requester.id}
     />
   ) : (
     <p className="bold">Introduce un pedido para continuar</p>

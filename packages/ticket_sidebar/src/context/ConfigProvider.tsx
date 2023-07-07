@@ -69,9 +69,7 @@ export const ConfigProvider = ({
     }
   }
 
-  React.useEffect(() => {
-    getConfig()
-  }, [])
+  React.useEffect(() => void getConfig(), [])
 
   React.useEffect(() => void isBetaTesterUser(), [])
 

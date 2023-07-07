@@ -16,7 +16,7 @@ type OrderInfoProps = {
 
 const OrderInfo = ({ orderId, ticketId, requesterId }: OrderInfoProps) => {
   const [order, setOrder] = React.useState<Order>({} as Order)
-  const { httpClient, minimumOrderIdLength } = useConfig()
+  const { httpClient, minimumOrderIdLength, isBetaTester } = useConfig()
 
   const getOrderInfo = async (orderId: string) => {
     try {
@@ -57,13 +57,15 @@ const OrderInfo = ({ orderId, ticketId, requesterId }: OrderInfoProps) => {
         </Col>
       </Row>
       <OrderStatus order={order} />
-      <Row>
-        <Col size={6} offset={1}>
-          <Button size="small" style={{ marginLeft: 4 }} onClick={callClient}>
-            Llamar
-          </Button>
-        </Col>
-      </Row>
+      {isBetaTester && (
+        <Row>
+          <Col size={6} offset={1}>
+            <Button size="small" style={{ marginLeft: 4 }} onClick={callClient}>
+              Llamar
+            </Button>
+          </Col>
+        </Row>
+      )}
     </Grid>
   )
 }

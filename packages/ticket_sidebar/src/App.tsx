@@ -75,15 +75,15 @@ const App = () => {
     fillTicketInfo(orderId)
   }, [orderId])
 
-  if (isBetaTester) {
-    return orderId && orderId.length >= minimumOrderIdLength ? (
-      <OrderInfo orderId={orderId} />
-    ) : (
-      <p className="bold">Introduce un pedido para continuar</p>
-    )
-  } else {
+  if (!isBetaTester) {
     return null
   }
+
+  return orderId && orderId.length >= minimumOrderIdLength ? (
+    <OrderInfo orderId={orderId} />
+  ) : (
+    <p className="bold">Introduce un pedido para continuar</p>
+  )
 }
 
 export default App

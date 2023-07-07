@@ -40,17 +40,17 @@ const Indicator = styled.div<{ $type: OrderStatus }>`
           background-color: var(--zd-color-green-600);
         `
       }
-      case 'cancelled_by_customer': {
+      case 'cancelled-by-customer': {
         return css`
           background-color: var(--zd-color-secondary-crimson-600);
         `
       }
-      case 'cancelled_by_system': {
+      case 'cancelled-by-system': {
         return css`
           background-color: var(--zd-color-secondary-crimson-600);
         `
       }
-      case 'user_unreachable': {
+      case 'user-unreachable': {
         return css`
           background-color: var(--zd-color-yellow-400);
         `

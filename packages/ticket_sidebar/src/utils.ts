@@ -12,9 +12,9 @@ const STATUS_MAP = new Map<OrderStatus, string>([
   ['prepared', 'Prepared'],
   ['delivering', 'Delivering'],
   ['delivered', 'Delivered'],
-  ['cancelled_by_customer', 'Cancelled by customer'],
-  ['cancelled_by_system', 'Cancelled by system'],
-  ['user_unreachable', 'User unreachable'],
+  ['cancelled-by-customer', 'Cancelled by customer'],
+  ['cancelled-by-system', 'Cancelled by system'],
+  ['user-unreachable', 'User unreachable'],
   ['delayed', 'Delayed'],
 ])
 export const getOrderStatus = (status: OrderStatus) => {

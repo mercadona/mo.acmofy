@@ -37,10 +37,10 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
   if (!orderId) return null
 
   return (
-    <Grid gutters={false}>
+    <Grid>
       <Row>
-        <Col className="title" size={12}>
-          Pedido {orderId}
+        <Col className="title" xs={12}>
+          <BoldText>Pedido {orderId}</BoldText>
         </Col>
       </Row>
       <OrderStatus order={order} />

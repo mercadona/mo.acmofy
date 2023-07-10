@@ -25,11 +25,11 @@ const OrderStatus = ({ order }: OrderStatusProps) => {
         justifyContent={'center'}
         alignItems={'center'}
       >
-        <Col className="state" size={3} offset={1}>
-          Estado
+        <Col xs={3} offsetXs={1}>
+          <Span>Estado</Span>
         </Col>
         <Col
-          size={8}
+          xs={8}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -41,11 +41,11 @@ const OrderStatus = ({ order }: OrderStatusProps) => {
       </Row>
       <Separator />
       <Row justifyContent={'center'} alignItems={'center'}>
-        <Col className="state" size={3} offset={1}>
-          Teléfono
+        <Col xs={3} offsetXs={1}>
+          <Span>Teléfono</Span>
         </Col>
         <Col
-          size={8}
+          xs={8}
           style={{
             display: 'flex',
             alignItems: 'center',

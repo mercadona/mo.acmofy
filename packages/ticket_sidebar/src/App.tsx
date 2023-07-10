@@ -10,7 +10,7 @@ import { useDebounce } from 'react-use'
 
 import './style.css'
 
-const DEBOUNCE_MS = 500
+const DEBOUNCE_MS = 250
 
 const App = () => {
   const { httpClient, orderIdCustomFieldId, minimumOrderIdLength } = useConfig()

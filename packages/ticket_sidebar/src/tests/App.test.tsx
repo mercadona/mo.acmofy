@@ -1,4 +1,4 @@
-import { render, screen } from '../utils/test-utils'
+import { render, screen, waitFor } from '../utils/test-utils'
 
 import App from '../App'
 import { Mocked, expect } from 'vitest'
@@ -141,7 +141,7 @@ describe('Tests for App component', () => {
       expect(await screen.findByText(/\+3466666666/i)).toBeInTheDocument()
     })
 
-    it.only('should not display OrderInfo before timeout', async () => {
+    it.only('should not call fillTicketInfo before timeout', async () => {
       client.get.mockImplementation((what: string) => {
         if (what === 'currentUser.email') {
           return Promise.resolve({
@@ -169,16 +169,11 @@ describe('Tests for App component', () => {
       client.on.mockImplementation((_: string, cb: (orderId: string) => void) =>
         cb('21123')
       )
-      client.request.mockResolvedValue({
-        status: 'checkout',
-        phone_country_code: '34',
-        phone_number: '66666666',
-      })
 
       render(<App />)
 
-      expect(await screen.findByText(/Pedido 21123/i)).not.toBeInTheDocument()
-      expect(await screen.findByText(/\+3466666666/i)).not.toBeInTheDocument()
+      expect(await screen.findByText(/Pedido 21123/i)).toBeInTheDocument()
+      await waitFor(() => expect(client.request).not.toHaveBeenCalled())
     })
 
     describe('when User is not a Beta Tester', () => {

@@ -141,6 +141,46 @@ describe('Tests for App component', () => {
       expect(await screen.findByText(/\+3466666666/i)).toBeInTheDocument()
     })
 
+    it.only('should not display OrderInfo before timeout', async () => {
+      client.get.mockImplementation((what: string) => {
+        if (what === 'currentUser.email') {
+          return Promise.resolve({
+            errors: [],
+            'currentUser.email': 'sgarcal123456@mercadona.es',
+          })
+        }
+
+        if (what === 'ticket.customField:custom_field_1234567') {
+          return Promise.resolve({
+            errors: [],
+            'ticket.customField:custom_field_1234567': '',
+          })
+        }
+
+        if (what === 'ticket') {
+          return Promise.resolve({
+            errors: [],
+            ticket: {
+              id: 12345,
+            },
+          })
+        }
+      })
+      client.on.mockImplementation((_: string, cb: (orderId: string) => void) =>
+        cb('21123')
+      )
+      client.request.mockResolvedValue({
+        status: 'checkout',
+        phone_country_code: '34',
+        phone_number: '66666666',
+      })
+
+      render(<App />)
+
+      expect(await screen.findByText(/Pedido 21123/i)).not.toBeInTheDocument()
+      expect(await screen.findByText(/\+3466666666/i)).not.toBeInTheDocument()
+    })
+
     describe('when User is not a Beta Tester', () => {
       it.todo('should not display something')
     })

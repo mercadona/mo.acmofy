@@ -20,7 +20,7 @@ const OrderStatus = ({ order }: OrderStatusProps) => {
     <>
       <Row
         style={{
-          marginTop: 14,
+          marginTop: 24,
         }}
         justifyContent={'center'}
         alignItems={'center'}

@@ -13,7 +13,6 @@
         "autoHide": false,
         "url": "assets/ticket_sidebar/index.html",
         "size": {
-          "height": "172px",
           "width": "340px"
         },
         "flexible": true

@@ -13,6 +13,10 @@ const Separator = styled.hr`
   margin: 16px 0;
 `
 
+const Span = styled.span`
+  color: var(--zd-color-grey-600);
+`
+
 const OrderStatus = ({ order }: OrderStatusProps) => {
   const capitalizedText = getOrderStatus(order.status)
 

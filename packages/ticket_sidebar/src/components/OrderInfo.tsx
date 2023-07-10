@@ -5,10 +5,16 @@ import { Order } from '../types'
 import { useConfig } from '../context/ConfigProvider'
 import { ordersClient } from '../clients'
 import { hasLengthGreaterOrEqualThan } from '../utils'
+import { styled } from 'styled-components'
 
 type OrderInfoProps = {
   orderId: string | undefined
 }
+
+const BoldText = styled.span`
+  color: var(--zd-color-grey-800);
+  font-weight: bold;
+`
 
 const OrderInfo = ({ orderId }: OrderInfoProps) => {
   const [order, setOrder] = React.useState<Order>({} as Order)

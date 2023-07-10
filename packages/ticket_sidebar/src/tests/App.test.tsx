@@ -30,7 +30,12 @@ describe('Tests for App component', () => {
   })
 
   beforeEach(() => {
+    vi.useFakeTimers()
     vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   describe('when app starts', () => {
@@ -172,8 +177,18 @@ describe('Tests for App component', () => {
 
       render(<App />)
 
-      expect(await screen.findByText(/Pedido 21123/i)).toBeInTheDocument()
-      await waitFor(() => expect(client.request).not.toHaveBeenCalled())
+      const requestBody = {
+        contentType: 'application/json',
+        type: 'POST',
+        data: JSON.stringify({ order_id: '21123' }),
+        url: 'https://example.com/api/tickets/12345/complete/',
+      }
+
+      expect(client.request).not.toHaveBeenCalledWith(requestBody)
+
+      await vi.advanceTimersByTimeAsync(500)
+
+      expect(client.request).toHaveBeenCalledWith(requestBody)
     })
 
     describe('when User is not a Beta Tester', () => {

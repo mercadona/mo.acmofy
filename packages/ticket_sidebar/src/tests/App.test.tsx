@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '../utils/test-utils'
+import { render, screen } from '../utils/test-utils'
 
 import App from '../App'
 import { Mocked, expect } from 'vitest'
@@ -35,7 +35,7 @@ describe('Tests for App component', () => {
   })
 
   afterEach(() => {
-    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   describe('when app starts', () => {
@@ -146,7 +146,7 @@ describe('Tests for App component', () => {
       expect(await screen.findByText(/\+3466666666/i)).toBeInTheDocument()
     })
 
-    it.only('should not call fillTicketInfo before timeout', async () => {
+    it('should not call fillTicketInfo before timeout', async () => {
       client.get.mockImplementation((what: string) => {
         if (what === 'currentUser.email') {
           return Promise.resolve({

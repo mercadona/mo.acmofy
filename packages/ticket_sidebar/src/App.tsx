@@ -15,10 +15,21 @@ const App = () => {
   const [orderId, setOrderId] = React.useState<string>()
   const [ticket, setTicket] = React.useState<Ticket>({} as Ticket)
 
-  const fillTicketInfo = async (orderId: string) => {
+  useDebounce(
+    () => {
+      if (!orderId || orderId.length < minimumOrderIdLength) return
+      if (!ticket || typeof ticket.id === 'undefined') return
+
+      fillTicketInfo(orderId, ticket.id)
+    },
+    500,
+    [orderId, ticket.id]
+  )
+
+  const fillTicketInfo = async (orderId: string, ticketId: number) => {
     try {
       await ticketsClient.complete(httpClient, {
-        ticketId: ticket.id,
+        ticketId,
         orderId,
       })
     } catch (error) {
@@ -66,11 +77,6 @@ const App = () => {
   React.useEffect(() => void getTicketInfo(), [])
 
   React.useEffect(() => void getOrderId(), [])
-
-  React.useEffect(() => {
-    if (!orderId || orderId.length < minimumOrderIdLength) return
-    fillTicketInfo(orderId)
-  }, [orderId])
 
   return orderId && orderId.length >= minimumOrderIdLength ? (
     <OrderInfo orderId={orderId} />

@@ -15,7 +15,7 @@ describe('Tests for OrderStatus', () => {
     ${'cancelled-by-system'}   | ${'Cancelled by system'}
     ${'user-unreachable'}      | ${'User unreachable'}
     ${'delayed'}               | ${'Delayed'}
-  `('should render OrderStatus properly', ({ status, expected }) => {
+  `('should render OrderStatus ($status) properly', ({ status, expected }) => {
     const order = {
       status,
       phone_country_code: 34,

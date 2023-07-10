@@ -10,6 +10,8 @@ import { useDebounce } from 'react-use'
 
 import './style.css'
 
+const DEBOUNCE_MS = 500
+
 const App = () => {
   const { httpClient, orderIdCustomFieldId, minimumOrderIdLength } = useConfig()
   const [orderId, setOrderId] = React.useState<string>()
@@ -22,7 +24,7 @@ const App = () => {
 
       fillTicketInfo(orderId, ticket.id)
     },
-    500,
+    DEBOUNCE_MS,
     [orderId, ticket.id]
   )
 

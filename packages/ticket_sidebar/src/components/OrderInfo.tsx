@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Grid, Col, Row } from '@zendeskgarden/react-grid'
 import OrderStatus from './OrderStatus'
-import { Order } from '../types'
+import { Order, BackendError } from '../types'
 import { useConfig } from '../context/ConfigProvider'
 import { ordersClient } from '../clients'
 import { hasLengthGreaterOrEqualThan } from '../utils'
@@ -16,8 +16,18 @@ const BoldText = styled.span`
   font-weight: bold;
 `
 
+const isBackendError = (error: unknown): error is BackendError => {
+  if (typeof error === 'object') {
+    if (error !== null) {
+      return 'responseJSON' in error
+    }
+  }
+  return false
+}
+
 const OrderInfo = ({ orderId }: OrderInfoProps) => {
   const [order, setOrder] = React.useState<Order | null>(null)
+  const [error, setError] = React.useState<BackendError | null>(null)
   const { httpClient, minimumOrderIdLength } = useConfig()
 
   const getOrderDetail = async (orderId: string) => {
@@ -27,8 +37,11 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
         orderId
       )
       setOrder(order)
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      console.log(error)
+      if (isBackendError(error)) {
+        setError(error)
+      }
     }
   }
 
@@ -39,6 +52,32 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
 
     getOrderDetail(orderId)
   }, [orderId])
+
+  if (!order && error) {
+    if (error.status === 404) {
+      return (
+        <Grid>
+          <Row>
+            <Col className="title" xs={12}>
+              <BoldText>Pedido {orderId}</BoldText>
+            </Col>
+          </Row>
+          Pedido no encontrado
+        </Grid>
+      )
+    }
+
+    return (
+      <Grid>
+        <Row>
+          <Col className="title" xs={12}>
+            <BoldText>Pedido {orderId}</BoldText>
+          </Col>
+        </Row>
+        {error.statusText}
+      </Grid>
+    )
+  }
 
   if (!order) return null
 

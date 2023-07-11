@@ -6,17 +6,32 @@ import { TicketResponse, Ticket } from './types'
 
 import OrderInfo from './components/OrderInfo'
 import { ticketsClient } from './clients'
+import { useDebounce } from 'react-use'
+
 import './style.css'
+
+const DEBOUNCE_MS = 250
 
 const App = () => {
   const { httpClient, orderIdCustomFieldId, minimumOrderIdLength } = useConfig()
   const [orderId, setOrderId] = React.useState<string>()
   const [ticket, setTicket] = React.useState<Ticket>({} as Ticket)
 
-  const fillTicketInfo = async (orderId: string) => {
+  useDebounce(
+    () => {
+      if (!orderId || orderId.length < minimumOrderIdLength) return
+      if (!ticket || typeof ticket.id === 'undefined') return
+
+      fillTicketInfo(orderId, ticket.id)
+    },
+    DEBOUNCE_MS,
+    [orderId, ticket.id]
+  )
+
+  const fillTicketInfo = async (orderId: string, ticketId: number) => {
     try {
       await ticketsClient.complete(httpClient, {
-        ticketId: ticket.id,
+        ticketId,
         orderId,
       })
     } catch (error) {
@@ -64,11 +79,6 @@ const App = () => {
   React.useEffect(() => void getTicketInfo(), [])
 
   React.useEffect(() => void getOrderId(), [])
-
-  React.useEffect(() => {
-    if (!orderId || orderId.length < minimumOrderIdLength) return
-    fillTicketInfo(orderId)
-  }, [orderId])
 
   return orderId && orderId.length >= minimumOrderIdLength ? (
     <OrderInfo orderId={orderId} />

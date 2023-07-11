@@ -30,7 +30,12 @@ describe('Tests for App component', () => {
   })
 
   beforeEach(() => {
+    vi.useFakeTimers()
     vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   describe('when app starts', () => {
@@ -139,6 +144,51 @@ describe('Tests for App component', () => {
 
       expect(await screen.findByText(/Pedido 21123/i)).toBeInTheDocument()
       expect(await screen.findByText(/\+3466666666/i)).toBeInTheDocument()
+    })
+
+    it('should not call fillTicketInfo before timeout', async () => {
+      client.get.mockImplementation((what: string) => {
+        if (what === 'currentUser.email') {
+          return Promise.resolve({
+            errors: [],
+            'currentUser.email': 'sgarcal123456@mercadona.es',
+          })
+        }
+
+        if (what === 'ticket.customField:custom_field_1234567') {
+          return Promise.resolve({
+            errors: [],
+            'ticket.customField:custom_field_1234567': '',
+          })
+        }
+
+        if (what === 'ticket') {
+          return Promise.resolve({
+            errors: [],
+            ticket: {
+              id: 12345,
+            },
+          })
+        }
+      })
+      client.on.mockImplementation((_: string, cb: (orderId: string) => void) =>
+        cb('21123')
+      )
+
+      render(<App />)
+
+      const requestBody = {
+        contentType: 'application/json',
+        type: 'POST',
+        data: JSON.stringify({ order_id: '21123' }),
+        url: 'https://example.com/api/tickets/12345/complete/',
+      }
+
+      expect(client.request).not.toHaveBeenCalledWith(requestBody)
+
+      await vi.advanceTimersByTimeAsync(500)
+
+      expect(client.request).toHaveBeenCalledWith(requestBody)
     })
 
     describe('when User is not a Beta Tester', () => {

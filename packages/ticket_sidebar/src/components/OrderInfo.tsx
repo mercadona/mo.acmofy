@@ -20,7 +20,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
   const [order, setOrder] = React.useState<Order>({} as Order)
   const { httpClient, minimumOrderIdLength } = useConfig()
 
-  const getOrderInfo = async (orderId: string) => {
+  const getOrderDetail = async (orderId: string) => {
     try {
       const order = await ordersClient.getOrderDetail<Order>(
         httpClient,
@@ -37,7 +37,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
       hasLengthGreaterOrEqualThan(minimumOrderIdLength)
     if (!(orderId && hasLengthGreaterOrEqualN(orderId))) return
 
-    getOrderInfo(orderId)
+    getOrderDetail(orderId)
   }, [orderId])
 
   if (!orderId) return null

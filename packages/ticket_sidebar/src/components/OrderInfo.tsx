@@ -17,7 +17,7 @@ const BoldText = styled.span`
 `
 
 const OrderInfo = ({ orderId }: OrderInfoProps) => {
-  const [order, setOrder] = React.useState<Order>({} as Order)
+  const [order, setOrder] = React.useState<Order | null>(null)
   const { httpClient, minimumOrderIdLength } = useConfig()
 
   const getOrderDetail = async (orderId: string) => {
@@ -40,7 +40,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
     getOrderDetail(orderId)
   }, [orderId])
 
-  if (!orderId) return null
+  if (!order) return null
 
   return (
     <Grid>

@@ -12,28 +12,8 @@
   -webkit-text-size-adjust: 100%;
 }
 
-.indicator {
-  border-radius: 100%;
-  width: 16px;
-  height: 16px;
-}
-
-.indicator__confirmed {
-  display: inline-block;
-  border-radius: 100%;
-  width: 12px;
-  height: 12px;
-  background-color: var(--zd-color-grey-800);
-  margin-right: 8px;
-}
-
-.title {
-  color: var(--zd-color-grey-800);
-  font-weight: bold;
-}
-
-.state {
-  color: var(--zd-color-grey-600);
+#app {
+  margin-top: 16px;
 }
 
 .bold {

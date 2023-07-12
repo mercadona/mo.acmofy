@@ -13,5 +13,4 @@ export const icons = {
       />
     </svg>
   ),
-  another_alert: '',
 }

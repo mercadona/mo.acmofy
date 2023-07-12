@@ -37,7 +37,8 @@ describe('OrderInfo tests', () => {
     })
     render(<OrderInfo orderId={'21124'} />)
 
-    expect(await screen.findByText(/Pedido 21124/i)).toBeInTheDocument()
-    expect(await screen.findByText(/Pedido no encontrado/)).toBeInTheDocument()
+    expect(
+      await screen.findByText(/El pedido 21124 no existe/)
+    ).toBeInTheDocument()
   })
 })

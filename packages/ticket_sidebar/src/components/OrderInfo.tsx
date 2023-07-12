@@ -2,9 +2,12 @@ import * as React from 'react'
 import { Grid, Col, Row } from '@zendeskgarden/react-grid'
 import OrderStatus from './OrderStatus'
 import { Order, BackendError } from '../types'
+import { Icon } from '../icons'
+
 import { useConfig } from '../context/ConfigProvider'
 import { ordersClient } from '../clients'
 import { hasLengthGreaterOrEqualThan } from '../utils'
+
 import { styled } from 'styled-components'
 
 type OrderInfoProps = {
@@ -26,9 +29,9 @@ const isBackendError = (error: unknown): error is BackendError => {
 }
 
 const OrderInfo = ({ orderId }: OrderInfoProps) => {
+  const { httpClient, minimumOrderIdLength } = useConfig()
   const [order, setOrder] = React.useState<Order | null>(null)
   const [error, setError] = React.useState<BackendError | null>(null)
-  const { httpClient, minimumOrderIdLength } = useConfig()
 
   const getOrderDetail = async (orderId: string) => {
     try {
@@ -37,6 +40,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
         orderId
       )
       setOrder(order)
+      setError(null)
     } catch (error: unknown) {
       console.log(error)
       if (isBackendError(error)) {
@@ -53,16 +57,22 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
     getOrderDetail(orderId)
   }, [orderId])
 
-  if (!order && error) {
+  if (error) {
     if (error.status === 404) {
       return (
         <Grid>
           <Row>
-            <Col className="title" xs={12}>
-              <BoldText>Pedido {orderId}</BoldText>
+            <Col
+              className="title"
+              xs={12}
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              <Icon type={'alert'} />
+              <BoldText style={{ marginLeft: 8 }}>
+                El pedido {orderId} no existe
+              </BoldText>
             </Col>
           </Row>
-          Pedido no encontrado
         </Grid>
       )
     }

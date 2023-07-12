@@ -60,7 +60,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
   if (error) {
     if (error.status === 404) {
       return (
-        <Grid>
+        <Grid gutters={false}>
           <Row>
             <Col
               className="title"
@@ -78,7 +78,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
     }
 
     return (
-      <Grid>
+      <Grid gutters={false}>
         <Row>
           <Col className="title" xs={12}>
             <BoldText>Pedido {orderId}</BoldText>
@@ -92,7 +92,7 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
   if (!order) return null
 
   return (
-    <Grid>
+    <Grid gutters={false}>
       <Row>
         <Col className="title" xs={12}>
           <BoldText>Pedido {orderId}</BoldText>

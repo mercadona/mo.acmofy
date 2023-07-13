@@ -5,22 +5,7 @@ import { Mocked, expect } from 'vitest'
 import zafClient from '@app/zendesk/sdk'
 import { vi } from 'vitest'
 
-vi.mock('@app/zendesk/sdk', () => {
-  return {
-    default: {
-      metadata: vi.fn().mockResolvedValue({
-        settings: {
-          URL_ZENDESK_HOOK: 'https://example.com/api',
-          MINIMUM_ORDER_ID_LENGTH: 5,
-          ORDER_ID_CUSTOM_FIELD_ID: '1234567',
-        },
-      }),
-      get: vi.fn(),
-      on: vi.fn().mockReturnValue(true),
-      request: vi.fn().mockResolvedValue(true),
-    },
-  }
-})
+vi.mock('@app/zendesk/sdk')
 
 describe('Tests for App component', () => {
   let client: Mocked<typeof zafClient>

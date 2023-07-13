@@ -1,10 +1,13 @@
 import * as React from 'react'
 import { Grid, Col, Row } from '@zendeskgarden/react-grid'
 import OrderStatus from './OrderStatus'
-import { Order } from '../types'
+import { Order, BackendError } from '../types'
+import { Icon } from '../icons'
+
 import { useConfig } from '../context/ConfigProvider'
 import { ordersClient } from '../clients'
 import { hasLengthGreaterOrEqualThan } from '../utils'
+
 import { styled } from 'styled-components'
 
 type OrderInfoProps = {
@@ -16,19 +19,33 @@ const BoldText = styled.span`
   font-weight: bold;
 `
 
-const OrderInfo = ({ orderId }: OrderInfoProps) => {
-  const [order, setOrder] = React.useState<Order>({} as Order)
-  const { httpClient, minimumOrderIdLength } = useConfig()
+const isBackendError = (error: unknown): error is BackendError => {
+  if (typeof error === 'object') {
+    if (error !== null) {
+      return 'responseJSON' in error
+    }
+  }
+  return false
+}
 
-  const getOrderInfo = async (orderId: string) => {
+const OrderInfo = ({ orderId }: OrderInfoProps) => {
+  const { httpClient, minimumOrderIdLength } = useConfig()
+  const [order, setOrder] = React.useState<Order | null>(null)
+  const [error, setError] = React.useState<BackendError | null>(null)
+
+  const getOrderDetail = async (orderId: string) => {
     try {
       const order = await ordersClient.getOrderDetail<Order>(
         httpClient,
         orderId
       )
       setOrder(order)
-    } catch (error) {
-      console.error(error)
+      setError(null)
+    } catch (error: unknown) {
+      console.log(error)
+      if (isBackendError(error)) {
+        setError(error)
+      }
     }
   }
 
@@ -37,13 +54,45 @@ const OrderInfo = ({ orderId }: OrderInfoProps) => {
       hasLengthGreaterOrEqualThan(minimumOrderIdLength)
     if (!(orderId && hasLengthGreaterOrEqualN(orderId))) return
 
-    getOrderInfo(orderId)
+    getOrderDetail(orderId)
   }, [orderId])
 
-  if (!orderId) return null
+  if (error) {
+    if (error.status === 404) {
+      return (
+        <Grid gutters={false}>
+          <Row>
+            <Col
+              className="title"
+              xs={12}
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              <Icon type={'alert'} />
+              <BoldText style={{ marginLeft: 8 }}>
+                El pedido {orderId} no existe
+              </BoldText>
+            </Col>
+          </Row>
+        </Grid>
+      )
+    }
+
+    return (
+      <Grid gutters={false}>
+        <Row>
+          <Col className="title" xs={12}>
+            <BoldText>Pedido {orderId}</BoldText>
+          </Col>
+        </Row>
+        {error.statusText}
+      </Grid>
+    )
+  }
+
+  if (!order) return null
 
   return (
-    <Grid>
+    <Grid gutters={false}>
       <Row>
         <Col className="title" xs={12}>
           <BoldText>Pedido {orderId}</BoldText>

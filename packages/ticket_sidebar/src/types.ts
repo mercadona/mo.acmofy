@@ -1,3 +1,11 @@
+export type BackendError = {
+  readyState: number
+  responseJSON: { [key: string]: Array<object> }
+  responseText: string
+  status: number
+  statusText: string
+}
+
 export type Ticket = {
   id: number
   requester: {
